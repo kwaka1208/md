@@ -1,0 +1,24 @@
+# Site settings
+# See https://jekyllrb.com/docs/configuration/
+title: Markdown Editor
+email: info@crssrds.jp
+description: >
+  ブラウザで軽快に動作するMarkdownエディタ。
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://md.crssrds.jp" # the base hostname & protocol for your site
+
+# Build settings
+theme: minima
+plugins:
+  - jekyll-feed
+
+# Exclude files from build
+exclude:
+  - script.js
+  - images/
+  - favicon/
+  - CNAME
+  - LICENSE
+
+# Markdown processor
+markdown: kramdown

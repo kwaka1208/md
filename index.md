@@ -1,0 +1,32 @@
+---
+layout: default
+title: Markdown Editor
+permalink: /
+---
+
+<!-- OGP Settings -->
+<meta property="og:image" content="https://md.crssrds.jp/images/OGP.png">
+<meta property="og:title" content="Markdown Editor">
+<meta property="og:type" content="website">
+
+<!-- Marked.js for Markdown parsing -->
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.js"></script>
+<!-- Highlight.js for Syntax Highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="icon" href="/favicon/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon/icon-512.png">
+<meta name="msapplication-TileColor" content="#003f5c">
+<meta name="theme-color" content="#003f5c">
+<link rel="stylesheet" href="./style.css">
+
+<div id="app-root">
+{% include body.html %} 
+</div>
+
+<script src="./script.js"></script>
