@@ -3,600 +3,599 @@ layout: default
 title: Markdown Editor
 permalink: /
 ---
-<div id="app-root">
-    <header>
-        <h1>Markdown Editor</h1>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <button class="header-btn" onclick="openPromptModal()" title="AIプロンプト">💡 AIへの指示を作る</button>
-            <button class="theme-toggle" onclick="openHelp()" title="使い方">❓</button>
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="ダークモード切替">🌙</button>
-        </div>
-    </header>
-
-    <div class="controls">
-        <!-- ファイル管理UI -->
-        <select id="fileSelect" class="file-select" onchange="loadFile()"></select>
-        <button class="btn" onclick="createNewFile()" title="新規作成">➕ 新規</button>
-        <button class="btn" onclick="renameCurrentFile()" title="名前変更">✏️ 名前変更</button>
-        <button class="btn" onclick="deleteCurrentFile()" title="削除">🗑️ 削除</button>
-
-        <div class="divider"></div>
-
-        <button class="btn" onclick="copyToClipboard('html')">📋 HTMLをコピー</button>
-        <button class="btn" onclick="copyToClipboard('markdown')">📋 MDをコピー</button>
-        <button class="btn" onclick="downloadFile('md')">⬇️ .md DL</button>
-        <button class="btn" onclick="downloadFile('html')">⬇️ .html DL</button>
-
-        <!-- コピーライト表記（フッターに移動） -->
+<header>
+    <h1>Markdown Editor</h1>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <button class="header-btn" onclick="openPromptModal()" title="AIプロンプト">💡 AIへの指示を作る</button>
+        <button class="theme-toggle" onclick="openHelp()" title="使い方">❓</button>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="ダークモード切替">🌙</button>
     </div>
+</header>
 
-    <div class="main-content">
-        <div class="pane">
-            <div class="pane-header">Editor</div>
-            <textarea id="editor" placeholder="# Hello Markdown&#13;&#10;ここにMarkdownを入力してください..."
-                oninput="updatePreview()"></textarea>
-        </div>
-        <div class="pane">
-            <div class="pane-header">Preview</div>
-            <div id="preview"></div>
-        </div>
+<div class="controls">
+    <!-- ファイル管理UI -->
+    <select id="fileSelect" class="file-select" onchange="loadFile()"></select>
+    <button class="btn" onclick="createNewFile()" title="新規作成">➕ 新規</button>
+    <button class="btn" onclick="renameCurrentFile()" title="名前変更">✏️ 名前変更</button>
+    <button class="btn" onclick="deleteCurrentFile()" title="削除">🗑️ 削除</button>
+
+    <div class="divider"></div>
+
+    <button class="btn" onclick="copyToClipboard('html')">📋 HTMLをコピー</button>
+    <button class="btn" onclick="copyToClipboard('markdown')">📋 MDをコピー</button>
+    <button class="btn" onclick="downloadFile('md')">⬇️ .md DL</button>
+    <button class="btn" onclick="downloadFile('html')">⬇️ .html DL</button>
+
+    <!-- コピーライト表記（フッターに移動） -->
+</div>
+
+<div class="main-content">
+    <div class="pane">
+        <div class="pane-header">Editor</div>
+        <textarea id="editor" placeholder="# Hello Markdown&#13;&#10;ここにMarkdownを入力してください..."
+            oninput="updatePreview()"></textarea>
     </div>
+    <div class="pane">
+        <div class="pane-header">Preview</div>
+        <div id="preview"></div>
+    </div>
+</div>
 
-    <!-- ヘルプモーダル -->
-    <div class="modal-overlay" id="helpModal" onclick="closeHelpOnOutside(event)">
-        <div class="modal-content" style="max-width: 700px; max-height: 85vh; overflow-y: auto;">
-            <div class="modal-header">
-                <h2>使い方と免責事項</h2>
-                <button class="modal-close" onclick="closeHelp()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>ブラウザで軽快に動作するMarkdownエディタです。<br>
-                    <a href="https://backlog.com/ja/blog/how-to-write-markdown/" target="_blank"
-                        rel="noopener noreferrer"
-                        style="color: var(--primary-color); text-decoration: none; font-size: 0.9rem;">🔗
-                        【マークダウン記法とは？】マークダウンの書き方を網羅的に解説（公開：株式会社ヌーラボ）</a>
-                </p>
-                <ul>
-                    <li><strong>自動保存：</strong> 入力した内容は自動的にブラウザに保存されます。</li>
-                    <li><strong>複数ファイル：</strong> 「➕ 新規」から新しいファイルを作成し、ドロップダウンで切り替えられます。</li>
-                    <li><strong>自動リスト：</strong> <code>- </code> や <code>1. </code> で改行するとリストが自動継続します。</li>
-                    <li><strong>インデント：</strong> <code>Tab</code> キーで字下げ、<code>Shift + Tab</code> で字下げを戻せます。</li>
-                    <li><strong>出力：</strong> HTML形式やMarkdown形式でのコピー、ファイルダウンロードが可能です。</li>
-                </ul>
+<!-- ヘルプモーダル -->
+<div class="modal-overlay" id="helpModal" onclick="closeHelpOnOutside(event)">
+    <div class="modal-content" style="max-width: 700px; max-height: 85vh; overflow-y: auto;">
+        <div class="modal-header">
+            <h2>使い方と免責事項</h2>
+            <button class="modal-close" onclick="closeHelp()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>ブラウザで軽快に動作するMarkdownエディタです。<br>
+                <a href="https://backlog.com/ja/blog/how-to-write-markdown/" target="_blank"
+                    rel="noopener noreferrer"
+                    style="color: var(--primary-color); text-decoration: none; font-size: 0.9rem;">🔗
+                    【マークダウン記法とは？】マークダウンの書き方を網羅的に解説（公開：株式会社ヌーラボ）</a>
+            </p>
+            <ul>
+                <li><strong>自動保存：</strong> 入力した内容は自動的にブラウザに保存されます。</li>
+                <li><strong>複数ファイル：</strong> 「➕ 新規」から新しいファイルを作成し、ドロップダウンで切り替えられます。</li>
+                <li><strong>自動リスト：</strong> <code>- </code> や <code>1. </code> で改行するとリストが自動継続します。</li>
+                <li><strong>インデント：</strong> <code>Tab</code> キーで字下げ、<code>Shift + Tab</code> で字下げを戻せます。</li>
+                <li><strong>出力：</strong> HTML形式やMarkdown形式でのコピー、ファイルダウンロードが可能です。</li>
+            </ul>
 
-                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 25px 0 15px;">
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 25px 0 15px;">
 
-                <h3
-                    style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
-                    💡 プロンプト作成支援について</h3>
-                <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px;">ヘッダーの「💡
-                    AIへの指示を作る」ボタンから、AIを強力に活用するための指示文（プロンプト）を入力できます。</p>
-                <ul>
-                    <li style="margin-bottom: 10px;"><strong>メタプロンプト：</strong>
-                        AI自身に「最適なプロンプト」を作らせるためのテンプレートです。<code>[目的]</code>を書き換えてChatGPT等に送信するだけで、質の高いプロンプトを生成してくれます。</li>
-                    <li><strong>汎用テンプレート：</strong> 「要約」「校正」「翻訳」「コード解説」「アイデア出し」など、日常業務でよく使うプロンプトのひな型をワンクリックで挿入できます。</li>
-                </ul>
+            <h3
+                style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                💡 プロンプト作成支援について</h3>
+            <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px;">ヘッダーの「💡
+                AIへの指示を作る」ボタンから、AIを強力に活用するための指示文（プロンプト）を入力できます。</p>
+            <ul>
+                <li style="margin-bottom: 10px;"><strong>メタプロンプト：</strong>
+                    AI自身に「最適なプロンプト」を作らせるためのテンプレートです。<code>[目的]</code>を書き換えてChatGPT等に送信するだけで、質の高いプロンプトを生成してくれます。</li>
+                <li><strong>汎用テンプレート：</strong> 「要約」「校正」「翻訳」「コード解説」「アイデア出し」など、日常業務でよく使うプロンプトのひな型をワンクリックで挿入できます。</li>
+            </ul>
 
-                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 25px 0 15px;">
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 25px 0 15px;">
 
-                <h3
-                    style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
-                    ご利用の前にご確認ください（免責事項）</h3>
-                <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px;">本ツールは <strong><a
-                            href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer"
-                            style="color: var(--primary-color); text-decoration: none;">クロスロード株式会社</a></strong>
-                    が提供するMarkdownエディタです。<br>ご利用にあたり、以下の事項について同意したものとみなします：</p>
-                <ul>
-                    <li>本ツールを利用して生じた如何なる損害についても、当方では責任を負いかねます。</li>
-                    <li>入力されたデータはお使いのブラウザ内部（ローカル環境）にのみ保存され、外部サーバー等には送信されません。</li>
-                    <li>ブラウザのキャッシュクリア等によりデータが失われる可能性があります。重要なデータは各自で保存してください。</li>
-                </ul>
-            </div>
+            <h3
+                style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                ご利用の前にご確認ください（免責事項）</h3>
+            <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px;">本ツールは <strong><a
+                        href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer"
+                        style="color: var(--primary-color); text-decoration: none;">クロスロード株式会社</a></strong>
+                が提供するMarkdownエディタです。<br>ご利用にあたり、以下の事項について同意したものとみなします：</p>
+            <ul>
+                <li>本ツールを利用して生じた如何なる損害についても、当方では責任を負いかねます。</li>
+                <li>入力されたデータはお使いのブラウザ内部（ローカル環境）にのみ保存され、外部サーバー等には送信されません。</li>
+                <li>ブラウザのキャッシュクリア等によりデータが失われる可能性があります。重要なデータは各自で保存してください。</li>
+            </ul>
         </div>
     </div>
+</div>
 
-    <!-- プロンプトモーダル -->
-    <div class="modal-overlay" id="promptModal" onclick="closePromptOnOutside(event)">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h2>💡 AIプロンプトツール</h2>
-                <button class="modal-close" onclick="closePrompt()">&times;</button>
+<!-- プロンプトモーダル -->
+<div class="modal-overlay" id="promptModal" onclick="closePromptOnOutside(event)">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2>💡 AIプロンプトツール</h2>
+            <button class="modal-close" onclick="closePrompt()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h3
+                style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                1. プロンプト作成用メタプロンプト</h3>
+            <p
+                style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 5px;">
+                生成AIに「最適なプロンプト」を作らせるためのテンプレートです。</p>
+            <div
+                style="background-color: var(--code-bg); padding: 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; border: 1px solid var(--border-color);">
+                <strong>💡 使い方：</strong><br>
+                1. 下のボタンを押してエディタにテンプレートを挿入。<br>
+                2. <code>[ここにあなたが達成したい目的を入力してください]</code> の部分に、AIにやってほしいこと（例：「ブログのタイトルを10個考えて」）を書きます。<br>
+                3. 書いた文章を全部コピーしてChatGPTやClaudeなどに貼り付けて送信します。<br>
+                4. AIが「最適な指示文（プロンプト）」を作ってくれるので、それを使って目的の作業を行います。
             </div>
-            <div class="modal-body">
-                <h3
-                    style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
-                    1. プロンプト作成用メタプロンプト</h3>
-                <p
-                    style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 5px;">
-                    生成AIに「最適なプロンプト」を作らせるためのテンプレートです。</p>
-                <div
-                    style="background-color: var(--code-bg); padding: 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; border: 1px solid var(--border-color);">
-                    <strong>💡 使い方：</strong><br>
-                    2. 下のボタンを押してエディタにテンプレートを挿入。<br>
-                    3. <code>[ここにあなたが達成したい目的を入力してください]</code> の部分に、AIにやってほしいこと（例：「ブログのタイトルを10個考えて」）を書きます。<br>
-                    4. 書いた文章を全部コピーしてChatGPTやClaudeなどに貼り付けて送信します。<br>
-                    5. AIが「最適な指示文（プロンプト）」を作ってくれるので、それを使って目的の作業を行います。
-                </div>
-                <button class="btn btn-primary" onclick="insertPrompt('meta')" style="margin-bottom: 25px;">📝
-                    エディタにメタプロンプトを挿入</button>
+            <button class="btn btn-primary" onclick="insertPrompt('meta')" style="margin-bottom: 25px;">📝
+                エディタにメタプロンプトを挿入</button>
 
-                <h3 style="font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">2.
-                    汎用プロンプトテンプレート</h3>
-                <p
-                    style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 15px;">
-                    よく使うプロンプトのひな型です。クリックするとエディタに挿入されます。</p>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn" onclick="insertPrompt('summary')">📄 文章の要約</button>
-                    <button class="btn" onclick="insertPrompt('proofread')">✅ 文章の校正</button>
-                    <button class="btn" onclick="insertPrompt('translate')">🌐 翻訳</button>
-                    <button class="btn" onclick="insertPrompt('code')">💻 コード解説</button>
-                    <button class="btn" onclick="insertPrompt('idea')">🧠 アイデア出し</button>
-                </div>
+            <h3 style="font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">2.
+                汎用プロンプトテンプレート</h3>
+            <p
+                style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 15px;">
+                よく使うプロンプトのひな型です。クリックするとエディタに挿入されます。</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn" onclick="insertPrompt('summary')">📄 文章の要約</button>
+                <button class="btn" onclick="insertPrompt('proofread')">✅ 文章の校正</button>
+                <button class="btn" onclick="insertPrompt('translate')">🌐 翻訳</button>
+                <button class="btn" onclick="insertPrompt('code')">💻 コード解説</button>
+                <button class="btn" onclick="insertPrompt('idea')">🧠 アイデア出し</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 免責事項モーダル -->
-    <div class="modal-overlay" id="disclaimerModal">
-        <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-header">
-                <h2 style="font-size: 1.2rem; margin: 0;">ご利用の前にご確認ください</h2>
+<!-- 免責事項モーダル -->
+<div class="modal-overlay" id="disclaimerModal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h2 style="font-size: 1.2rem; margin: 0;">ご利用の前にご確認ください</h2>
+        </div>
+        <div class="modal-body">
+            <p>本ツールは <strong><a href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer"
+                        style="color: var(--primary-color); text-decoration: none;">クロスロード株式会社</a></strong>
+                が提供するMarkdownエディタです。</p>
+            <p>ご利用にあたり、以下の事項にご同意ください：</p>
+            <ul>
+                <li>本ツールを利用して生じた如何なる損害についても、当方では責任を負いかねます。</li>
+                <li>入力されたデータはお使いのブラウザ内部（ローカル環境）にのみ保存され、外部サーバー等には送信されません。</li>
+                <li>ブラウザのキャッシュクリア等によりデータが失われる可能性があります。重要なデータは各自で保存してください。</li>
+            </ul>
+            <div style="margin-top: 20px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="disclaimerNoShow" style="cursor: pointer; width: 16px; height: 16px;">
+                <label for="disclaimerNoShow"
+                    style="font-size: 0.95rem; cursor: pointer; user-select: none;">次回以降表示しない</label>
             </div>
-            <div class="modal-body">
-                <p>本ツールは <strong><a href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer"
-                            style="color: var(--primary-color); text-decoration: none;">クロスロード株式会社</a></strong>
-                    が提供するMarkdownエディタです。</p>
-                <p>ご利用にあたり、以下の事項にご同意ください：</p>
-                <ul>
-                    <li>本ツールを利用して生じた如何なる損害についても、当方では責任を負いかねます。</li>
-                    <li>入力されたデータはお使いのブラウザ内部（ローカル環境）にのみ保存され、外部サーバー等には送信されません。</li>
-                    <li>ブラウザのキャッシュクリア等によりデータが失われる可能性があります。重要なデータは各自で保存してください。</li>
-                </ul>
-                <div style="margin-top: 20px; display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="disclaimerNoShow" style="cursor: pointer; width: 16px; height: 16px;">
-                    <label for="disclaimerNoShow"
-                        style="font-size: 0.95rem; cursor: pointer; user-select: none;">次回以降表示しない</label>
-                </div>
-                <div style="margin-top: 25px;">
-                    <button class="btn btn-primary" onclick="acceptDisclaimer()"
-                        style="width: 100%; justify-content: center; font-size: 1rem; padding: 10px;">了解しました</button>
-                </div>
+            <div style="margin-top: 25px;">
+                <button class="btn btn-primary" onclick="acceptDisclaimer()"
+                    style="width: 100%; justify-content: center; font-size: 1rem; padding: 10px;">了解しました</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        // DOM Elements
-        const editor = document.getElementById('editor');
-        const preview = document.getElementById('preview');
+<script>
+    // DOM Elements
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
 
-        // --- Marked.js 設定 (Syntax Highlighting) ---
-        // 最新のmarked.jsに対応するため、rendererをカスタマイズしてハイライトを適用
-        const renderer = {
-            code(code, infostring) {
-                const lang = (infostring || '').match(/\S*/)[0];
+    // --- Marked.js 設定 (Syntax Highlighting) ---
+    // 最新のmarked.jsに対応するため、rendererをカスタマイズしてハイライトを適用
+    const renderer = {
+        code(code, infostring) {
+            const lang = (infostring || '').match(/\S*/)[0];
 
-                let highlighted = '';
-                if (lang && hljs.getLanguage(lang)) {
-                    try {
-                        highlighted = hljs.highlight(code, { language: lang }).value;
-                    } catch (e) { }
-                } else {
-                    try {
-                        highlighted = hljs.highlightAuto(code).value;
-                    } catch (e) { }
-                }
-
-                // ハイライトに失敗または空の場合はエスケープしたコードを使用
-                if (!highlighted) {
-                    highlighted = code.replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
-                }
-
-                const languageClass = lang ? `language-${lang}` : '';
-                return `<pre><code class="hljs ${languageClass}">${highlighted}</code></pre>\n`;
-            }
-        };
-
-        marked.use({ renderer });
-
-        // --- 複数ファイル管理 (ローカルストレージ) ---
-        const STORAGE_FILES_KEY = 'md_editor_files';
-        const STORAGE_CURRENT_KEY = 'md_editor_current_id';
-        const STORAGE_DISCLAIMER_KEY = 'md_editor_disclaimer_accepted';
-
-        let files = [];
-        let currentFileId = null;
-
-        // --- 初期化 ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // 免責事項のチェック
-            if (!localStorage.getItem(STORAGE_DISCLAIMER_KEY) && !sessionStorage.getItem('md_editor_disclaimer_session')) {
-                document.getElementById('disclaimerModal').classList.add('active');
+            let highlighted = '';
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    highlighted = hljs.highlight(code, { language: lang }).value;
+                } catch (e) { }
+            } else {
+                try {
+                    highlighted = hljs.highlightAuto(code).value;
+                } catch (e) { }
             }
 
-            loadFilesFromStorage();
+            // ハイライトに失敗または空の場合はエスケープしたコードを使用
+            if (!highlighted) {
+                highlighted = code.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+            }
+
+            const languageClass = lang ? `language-${lang}` : '';
+            return `<pre><code class="hljs ${languageClass}">${highlighted}</code></pre>\n`;
+        }
+    };
+
+    marked.use({ renderer });
+
+    // --- 複数ファイル管理 (ローカルストレージ) ---
+    const STORAGE_FILES_KEY = 'md_editor_files';
+    const STORAGE_CURRENT_KEY = 'md_editor_current_id';
+    const STORAGE_DISCLAIMER_KEY = 'md_editor_disclaimer_accepted';
+
+    let files = [];
+    let currentFileId = null;
+
+    // --- 初期化 ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // 免責事項のチェック
+        if (!localStorage.getItem(STORAGE_DISCLAIMER_KEY) && !sessionStorage.getItem('md_editor_disclaimer_session')) {
+            document.getElementById('disclaimerModal').classList.add('active');
+        }
+
+        loadFilesFromStorage();
+        updateFileList();
+        loadCurrentFile();
+        updatePreview();
+    });
+
+    // --- 免責事項関連 ---
+    function acceptDisclaimer() {
+        const noShow = document.getElementById('disclaimerNoShow').checked;
+        if (noShow) {
+            // 次回以降（次回アクセス時）も表示しない
+            localStorage.setItem(STORAGE_DISCLAIMER_KEY, 'true');
+        } else {
+            // 今開いているタブ（セッション）が有効な間は再表示しない
+            sessionStorage.setItem('md_editor_disclaimer_session', 'true');
+        }
+        document.getElementById('disclaimerModal').classList.remove('active');
+    }
+
+    function loadFilesFromStorage() {
+        const savedFiles = localStorage.getItem(STORAGE_FILES_KEY);
+        if (savedFiles) {
+            try {
+                files = JSON.parse(savedFiles);
+            } catch (e) {
+                files = [];
+            }
+        }
+
+        // 初回起動時・または旧データからの移行
+        if (files.length === 0) {
+            const oldData = localStorage.getItem('md_editor_autosave_data');
+            files.push({
+                id: 'doc_' + Date.now(),
+                title: '無題のドキュメント',
+                content: oldData !== null ? oldData : ''
+            });
+            localStorage.removeItem('md_editor_autosave_data'); // 移行後削除
+            saveFilesToStorage();
+        }
+    }
+
+    function saveFilesToStorage() {
+        localStorage.setItem(STORAGE_FILES_KEY, JSON.stringify(files));
+    }
+
+    function updateFileList() {
+        const select = document.getElementById('fileSelect');
+        select.innerHTML = '';
+        files.forEach(f => {
+            const option = document.createElement('option');
+            option.value = f.id;
+            option.textContent = f.title;
+            select.appendChild(option);
+        });
+        if (currentFileId) {
+            select.value = currentFileId;
+        }
+    }
+
+    function loadCurrentFile() {
+        let savedCurrentId = localStorage.getItem(STORAGE_CURRENT_KEY);
+        let file = files.find(f => f.id === savedCurrentId);
+
+        // 該当ファイルがなければ最初のファイルを選択
+        if (!file && files.length > 0) {
+            file = files[0];
+        }
+
+        if (file) {
+            currentFileId = file.id;
+            document.getElementById('fileSelect').value = currentFileId;
+            editor.value = file.content;
+            localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
+        }
+    }
+
+    function loadFile() {
+        const select = document.getElementById('fileSelect');
+        currentFileId = select.value;
+        localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
+        const file = files.find(f => f.id === currentFileId);
+        if (file) {
+            editor.value = file.content;
+            updatePreview();
+        }
+    }
+
+    function createNewFile() {
+        const title = prompt('新しいドキュメントの名前を入力してください', '新しいドキュメント');
+        if (title) {
+            const newFile = {
+                id: 'doc_' + Date.now(),
+                title: title.trim() || '無題のドキュメント',
+                content: ''
+            };
+            files.push(newFile);
+            currentFileId = newFile.id;
+
+            saveFilesToStorage();
+            localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
+
+            updateFileList();
+            editor.value = '';
+            updatePreview();
+        }
+    }
+
+    function renameCurrentFile() {
+        const file = files.find(f => f.id === currentFileId);
+        if (file) {
+            const newTitle = prompt('ドキュメントの新しい名前を入力してください', file.title);
+            if (newTitle && newTitle.trim() !== '') {
+                file.title = newTitle.trim();
+                saveFilesToStorage();
+                updateFileList();
+            }
+        }
+    }
+
+    function deleteCurrentFile() {
+        if (files.length <= 1) {
+            alert('最後のドキュメントは削除できません。内容をクリアするか、新しいドキュメントを作成してから削除してください。');
+            return;
+        }
+
+        const file = files.find(f => f.id === currentFileId);
+        if (confirm(`「${file.title}」を削除してもよろしいですか？\n※この操作は取り消せません。`)) {
+            files = files.filter(f => f.id !== currentFileId);
+            currentFileId = files[0].id;
+
+            saveFilesToStorage();
+            localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
+
             updateFileList();
             loadCurrentFile();
             updatePreview();
-        });
-
-        // --- 免責事項関連 ---
-        function acceptDisclaimer() {
-            const noShow = document.getElementById('disclaimerNoShow').checked;
-            if (noShow) {
-                // 次回以降（次回アクセス時）も表示しない
-                localStorage.setItem(STORAGE_DISCLAIMER_KEY, 'true');
-            } else {
-                // 今開いているタブ（セッション）が有効な間は再表示しない
-                sessionStorage.setItem('md_editor_disclaimer_session', 'true');
-            }
-            document.getElementById('disclaimerModal').classList.remove('active');
         }
+    }
 
-        function loadFilesFromStorage() {
-            const savedFiles = localStorage.getItem(STORAGE_FILES_KEY);
-            if (savedFiles) {
-                try {
-                    files = JSON.parse(savedFiles);
-                } catch (e) {
-                    files = [];
-                }
-            }
+    // --- プレビュー更新 ---
+    function updatePreview() {
+        const markdownText = editor.value;
 
-            // 初回起動時・または旧データからの移行
-            if (files.length === 0) {
-                const oldData = localStorage.getItem('md_editor_autosave_data');
-                files.push({
-                    id: 'doc_' + Date.now(),
-                    title: '無題のドキュメント',
-                    content: oldData !== null ? oldData : ''
-                });
-                localStorage.removeItem('md_editor_autosave_data'); // 移行後削除
+        // 各ファイルごとにオートセーブ
+        if (currentFileId) {
+            const file = files.find(f => f.id === currentFileId);
+            if (file) {
+                file.content = markdownText;
                 saveFilesToStorage();
             }
         }
 
-        function saveFilesToStorage() {
-            localStorage.setItem(STORAGE_FILES_KEY, JSON.stringify(files));
-        }
+        const htmlContent = marked.parse(markdownText);
+        preview.innerHTML = htmlContent;
+    }
 
-        function updateFileList() {
-            const select = document.getElementById('fileSelect');
-            select.innerHTML = '';
-            files.forEach(f => {
-                const option = document.createElement('option');
-                option.value = f.id;
-                option.textContent = f.title;
-                select.appendChild(option);
-            });
-            if (currentFileId) {
-                select.value = currentFileId;
-            }
-        }
+    // --- 編集サポート (自動リスト) ---
+    editor.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            if (e.isComposing) return; // IME変換中は無効化
 
-        function loadCurrentFile() {
-            let savedCurrentId = localStorage.getItem(STORAGE_CURRENT_KEY);
-            let file = files.find(f => f.id === savedCurrentId);
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
 
-            // 該当ファイルがなければ最初のファイルを選択
-            if (!file && files.length > 0) {
-                file = files[0];
-            }
+            // 現在の行のテキストを取得
+            const text = this.value;
+            const prevLineStart = text.lastIndexOf('\n', start - 1) + 1;
+            const currentLine = text.substring(prevLineStart, start);
 
-            if (file) {
-                currentFileId = file.id;
-                document.getElementById('fileSelect').value = currentFileId;
-                editor.value = file.content;
-                localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
-            }
-        }
+            // リストパターンのマッチ (ハイフン、アスタリスク、数字)
+            const listMatch = currentLine.match(/^(\s*)([-*]|\d+\.)\s/);
 
-        function loadFile() {
-            const select = document.getElementById('fileSelect');
-            currentFileId = select.value;
-            localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
-            const file = files.find(f => f.id === currentFileId);
-            if (file) {
-                editor.value = file.content;
-                updatePreview();
-            }
-        }
-
-        function createNewFile() {
-            const title = prompt('新しいドキュメントの名前を入力してください', '新しいドキュメント');
-            if (title) {
-                const newFile = {
-                    id: 'doc_' + Date.now(),
-                    title: title.trim() || '無題のドキュメント',
-                    content: ''
-                };
-                files.push(newFile);
-                currentFileId = newFile.id;
-
-                saveFilesToStorage();
-                localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
-
-                updateFileList();
-                editor.value = '';
-                updatePreview();
-            }
-        }
-
-        function renameCurrentFile() {
-            const file = files.find(f => f.id === currentFileId);
-            if (file) {
-                const newTitle = prompt('ドキュメントの新しい名前を入力してください', file.title);
-                if (newTitle && newTitle.trim() !== '') {
-                    file.title = newTitle.trim();
-                    saveFilesToStorage();
-                    updateFileList();
-                }
-            }
-        }
-
-        function deleteCurrentFile() {
-            if (files.length <= 1) {
-                alert('最後のドキュメントは削除できません。内容をクリアするか、新しいドキュメントを作成してから削除してください。');
-                return;
-            }
-
-            const file = files.find(f => f.id === currentFileId);
-            if (confirm(`「${file.title}」を削除してもよろしいですか？\n※この操作は取り消せません。`)) {
-                files = files.filter(f => f.id !== currentFileId);
-                currentFileId = files[0].id;
-
-                saveFilesToStorage();
-                localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
-
-                updateFileList();
-                loadCurrentFile();
-                updatePreview();
-            }
-        }
-
-        // --- プレビュー更新 ---
-        function updatePreview() {
-            const markdownText = editor.value;
-
-            // 各ファイルごとにオートセーブ
-            if (currentFileId) {
-                const file = files.find(f => f.id === currentFileId);
-                if (file) {
-                    file.content = markdownText;
-                    saveFilesToStorage();
-                }
-            }
-
-            const htmlContent = marked.parse(markdownText);
-            preview.innerHTML = htmlContent;
-        }
-
-        // --- 編集サポート (自動リスト) ---
-        editor.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                if (e.isComposing) return; // IME変換中は無効化
-
-                const start = this.selectionStart;
-                const end = this.selectionEnd;
-
-                // 現在の行のテキストを取得
-                const text = this.value;
-                const prevLineStart = text.lastIndexOf('\n', start - 1) + 1;
-                const currentLine = text.substring(prevLineStart, start);
-
-                // リストパターンのマッチ (ハイフン、アスタリスク、数字)
-                const listMatch = currentLine.match(/^(\s*)([-*]|\d+\.)\s/);
-
-                if (listMatch) {
-                    e.preventDefault();
-
-                    const indent = listMatch[1];
-                    const marker = listMatch[2];
-
-                    // 空のリストアイテムでEnterを押した場合、リストを終了する
-                    if (currentLine.trim() === marker || currentLine.trim() === marker + '.') {
-                        // 行を削除して改行のみにする (リスト終了)
-                        const newText = text.substring(0, prevLineStart) + '\n' + text.substring(end);
-                        this.value = newText;
-                        this.selectionStart = this.selectionEnd = prevLineStart + 1;
-                    } else {
-                        // 新しいリストアイテムを挿入
-                        let newMarker = marker;
-                        // 番号付きリストの場合は番号をインクリメント
-                        if (/^\d+\.$/.test(marker)) {
-                            const num = parseInt(marker);
-                            newMarker = (num + 1) + '.';
-                        }
-
-                        const insertion = `\n${indent}${newMarker} `;
-                        const newText = text.substring(0, start) + insertion + text.substring(end);
-
-                        this.value = newText;
-                        this.selectionStart = this.selectionEnd = start + insertion.length;
-                    }
-                    // プレビュー即時更新
-                    updatePreview();
-                }
-            }
-
-            // Tab / Shift+Tab インデントサポート
-            if (e.key === 'Tab') {
+            if (listMatch) {
                 e.preventDefault();
-                const start = this.selectionStart;
-                const end = this.selectionEnd;
-                const value = this.value;
 
-                // 選択範囲の行頭・行末を探す
-                const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-                const lineEnd = value.indexOf('\n', end);
-                const endLinePos = lineEnd === -1 ? value.length : lineEnd;
+                const indent = listMatch[1];
+                const marker = listMatch[2];
 
-                const lines = value.substring(lineStart, endLinePos).split('\n');
-                const indentUnit = '    '; // 4スペース
-
-                let newText = '';
-                let newStart = start;
-                let newEnd = end;
-
-                if (e.shiftKey) {
-                    // Shift + Tab: インデント削除 (Outdent) & 連番リセット
-
-                    // 1. 直前の文脈から開始番号を決定する
-                    let nextNum = 1;
-                    const preLines = value.substring(0, lineStart).split('\n');
-
-                    // 逆方向に走査して、インデントアウト後のレベル(現在より1段浅い)にあるリストを探す
-                    // currentIndentLevel - 1 (ただしスペース数で判定)
-                    const firstSelLine = lines[0];
-                    const firstSelIndentMatch = firstSelLine.match(/^\s*/);
-                    const currentIndentLen = firstSelIndentMatch ? firstSelIndentMatch[0].length : 0;
-                    const targetIndentLen = Math.max(0, currentIndentLen - indentUnit.length);
-
-                    for (let i = preLines.length - 1; i >= 0; i--) {
-                        const pLine = preLines[i];
-                        const pIndentMatch = pLine.match(/^\s*/);
-                        const pIndentLen = pIndentMatch ? pIndentMatch[0].length : 0;
-
-                        if (pIndentLen === targetIndentLen) {
-                            // 同じインデントレベルの行を発見
-                            const listMatch = pLine.match(/^(\s*)(\d+)\./);
-                            if (listMatch) {
-                                nextNum = parseInt(listMatch[2]) + 1;
-                            }
-                            // リストでなくても、同じインデントレベルの何かにぶつかったら、そこが直前の兄弟とみなして探索終了
-                            // (ただし空行はスキップしたほうがいいかも？今回は簡易実装で空行以外なら終了)
-                            if (pLine.trim().length > 0) break;
-                        } else if (pIndentLen < targetIndentLen) {
-                            // さらに浅いインデント(親)にぶつかったら、これ以上前の兄弟はいないので 1 から
-                            if (pLine.trim().length > 0) break;
-                        }
-                    }
-
-                    newText = lines.map((line, i) => {
-                        let processedLine = line;
-
-                        // インデント削除
-                        if (line.startsWith(indentUnit)) {
-                            processedLine = line.substring(indentUnit.length);
-                            if (i === 0) newStart -= indentUnit.length;
-                            newEnd -= indentUnit.length;
-                        } else if (line.startsWith(' ') || line.startsWith('\t')) {
-                            const match = line.match(/^\s+/);
-                            const len = match ? Math.min(match[0].length, indentUnit.length) : 0;
-                            processedLine = line.substring(len);
-                            if (i === 0) newStart -= len;
-                            newEnd -= len;
-                        }
-
-                        // 番号付きリストなら番号を更新
-                        const listMatch = processedLine.match(/^(\s*)(\d+)\.(\s+)/);
-                        if (listMatch) {
-                            processedLine = processedLine.replace(/^(\s*)\d+\./, `$1${nextNum}.`);
-                            nextNum++;
-                        }
-
-                        return processedLine;
-                    }).join('\n');
+                // 空のリストアイテムでEnterを押した場合、リストを終了する
+                if (currentLine.trim() === marker || currentLine.trim() === marker + '.') {
+                    // 行を削除して改行のみにする (リスト終了)
+                    const newText = text.substring(0, prevLineStart) + '\n' + text.substring(end);
+                    this.value = newText;
+                    this.selectionStart = this.selectionEnd = prevLineStart + 1;
                 } else {
-                    // Tab: インデント追加 (Indent)
-
-                    // 1. 直前の文脈から開始番号を決定する
-                    let nextNum = 1;
-                    const preLines = value.substring(0, lineStart).split('\n');
-
-                    const firstSelLine = lines[0];
-                    const firstSelIndentMatch = firstSelLine.match(/^\s*/);
-                    const currentIndentLen = firstSelIndentMatch ? firstSelIndentMatch[0].length : 0;
-                    const targetIndentLen = currentIndentLen + indentUnit.length; // インデント後は深くなる
-
-                    for (let i = preLines.length - 1; i >= 0; i--) {
-                        const pLine = preLines[i];
-                        const pIndentMatch = pLine.match(/^\s*/);
-                        const pIndentLen = pIndentMatch ? pIndentMatch[0].length : 0;
-
-                        if (pIndentLen === targetIndentLen) {
-                            // 同じインデントレベル(深くなった先と同じレベル)の行を発見
-                            const listMatch = pLine.match(/^(\s*)(\d+)\./);
-                            if (listMatch) {
-                                nextNum = parseInt(listMatch[2]) + 1;
-                            }
-                            if (pLine.trim().length > 0) break;
-                        } else if (pIndentLen < targetIndentLen) {
-                            // 親レベルが見つかったら、そこまで兄弟はいなかったということ
-                            if (pLine.trim().length > 0) break;
-                        }
+                    // 新しいリストアイテムを挿入
+                    let newMarker = marker;
+                    // 番号付きリストの場合は番号をインクリメント
+                    if (/^\d+\.$/.test(marker)) {
+                        const num = parseInt(marker);
+                        newMarker = (num + 1) + '.';
                     }
 
-                    newText = lines.map((line, i) => {
-                        let indentedLine = indentUnit + line;
+                    const insertion = `\n${indent}${newMarker} `;
+                    const newText = text.substring(0, start) + insertion + text.substring(end);
 
-                        // 番号付きリストなら番号を更新
-                        const listMatch = indentedLine.match(/^(\s*)(\d+)\.(\s+)/);
-                        if (listMatch) {
-                            indentedLine = indentedLine.replace(/^(\s*)\d+\./, `$1${nextNum}.`);
-                            nextNum++;
-                        }
-
-                        const diff = indentedLine.length - line.length;
-                        if (i === 0) newStart += diff;
-                        newEnd += diff;
-
-                        return indentedLine;
-                    }).join('\n');
+                    this.value = newText;
+                    this.selectionStart = this.selectionEnd = start + insertion.length;
                 }
-
-                // テキスト更新
-                this.value = value.substring(0, lineStart) + newText + value.substring(endLinePos);
-
-                // カーソル位置復元
-                this.selectionStart = Math.max(lineStart, newStart);
-                this.selectionEnd = Math.max(lineStart, newEnd);
-
+                // プレビュー即時更新
                 updatePreview();
-            }
-        });
-
-
-        // --- コピー機能 ---
-        async function copyToClipboard(type) {
-            let text = "";
-            if (type === 'markdown') {
-                text = editor.value;
-            } else if (type === 'html') {
-                text = preview.innerHTML;
-            }
-
-            try {
-                await navigator.clipboard.writeText(text);
-                alert(`${type === 'markdown' ? 'Markdown' : 'HTML'} をクリップボードにコピーしました！`);
-            } catch (err) {
-                console.error('コピーに失敗しました:', err);
-                alert('コピーに失敗しました');
             }
         }
 
-        // --- ダウンロード機能 ---
-        function downloadFile(type) {
-            let content = "";
-            let mimeType = "";
-            let fileName = "";
+        // Tab / Shift+Tab インデントサポート
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            const value = this.value;
 
-            if (type === 'md') {
-                content = editor.value;
-                mimeType = "text/markdown";
-                fileName = "document.md";
-            } else if (type === 'html') {
-                // 完全なHTMLファイルとしてDLさせるためのテンプレート
-                // ハイライト用CSSも含める
-                const style = document.querySelector('style').textContent;
-                const isDark = document.body.classList.contains('dark-mode');
-                const hljsCss = isDark
-                    ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
-                    : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+            // 選択範囲の行頭・行末を探す
+            const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+            const lineEnd = value.indexOf('\n', end);
+            const endLinePos = lineEnd === -1 ? value.length : lineEnd;
 
-                content = `<!DOCTYPE html>
+            const lines = value.substring(lineStart, endLinePos).split('\n');
+            const indentUnit = '    '; // 4スペース
+
+            let newText = '';
+            let newStart = start;
+            let newEnd = end;
+
+            if (e.shiftKey) {
+                // Shift + Tab: インデント削除 (Outdent) & 連番リセット
+
+                // 1. 直前の文脈から開始番号を決定する
+                let nextNum = 1;
+                const preLines = value.substring(0, lineStart).split('\n');
+
+                // 逆方向に走査して、インデントアウト後のレベル(現在より1段浅い)にあるリストを探す
+                // currentIndentLevel - 1 (ただしスペース数で判定)
+                const firstSelLine = lines[0];
+                const firstSelIndentMatch = firstSelLine.match(/^\s*/);
+                const currentIndentLen = firstSelIndentMatch ? firstSelIndentMatch[0].length : 0;
+                const targetIndentLen = Math.max(0, currentIndentLen - indentUnit.length);
+
+                for (let i = preLines.length - 1; i >= 0; i--) {
+                    const pLine = preLines[i];
+                    const pIndentMatch = pLine.match(/^\s*/);
+                    const pIndentLen = pIndentMatch ? pIndentMatch[0].length : 0;
+
+                    if (pIndentLen === targetIndentLen) {
+                        // 同じインデントレベルの行を発見
+                        const listMatch = pLine.match(/^(\s*)(\d+)\./);
+                        if (listMatch) {
+                            nextNum = parseInt(listMatch[2]) + 1;
+                        }
+                        // リストでなくても、同じインデントレベルの何かにぶつかったら、そこが直前の兄弟とみなして探索終了
+                        // (ただし空行はスキップしたほうがいいかも？今回は簡易実装で空行以外なら終了)
+                        if (pLine.trim().length > 0) break;
+                    } else if (pIndentLen < targetIndentLen) {
+                        // さらに浅いインデント(親)にぶつかったら、これ以上前の兄弟はいないので 1 から
+                        if (pLine.trim().length > 0) break;
+                    }
+                }
+
+                newText = lines.map((line, i) => {
+                    let processedLine = line;
+
+                    // インデント削除
+                    if (line.startsWith(indentUnit)) {
+                        processedLine = line.substring(indentUnit.length);
+                        if (i === 0) newStart -= indentUnit.length;
+                        newEnd -= indentUnit.length;
+                    } else if (line.startsWith(' ') || line.startsWith('\t')) {
+                        const match = line.match(/^\s+/);
+                        const len = match ? Math.min(match[0].length, indentUnit.length) : 0;
+                        processedLine = line.substring(len);
+                        if (i === 0) newStart -= len;
+                        newEnd -= len;
+                    }
+
+                    // 番号付きリストなら番号を更新
+                    const listMatch = processedLine.match(/^(\s*)(\d+)\.(\s+)/);
+                    if (listMatch) {
+                        processedLine = processedLine.replace(/^(\s*)\d+\./, `$1${nextNum}.`);
+                        nextNum++;
+                    }
+
+                    return processedLine;
+                }).join('\n');
+            } else {
+                // Tab: インデント追加 (Indent)
+
+                // 1. 直前の文脈から開始番号を決定する
+                let nextNum = 1;
+                const preLines = value.substring(0, lineStart).split('\n');
+
+                const firstSelLine = lines[0];
+                const firstSelIndentMatch = firstSelLine.match(/^\s*/);
+                const currentIndentLen = firstSelIndentMatch ? firstSelIndentMatch[0].length : 0;
+                const targetIndentLen = currentIndentLen + indentUnit.length; // インデント後は深くなる
+
+                for (let i = preLines.length - 1; i >= 0; i--) {
+                    const pLine = preLines[i];
+                    const pIndentMatch = pLine.match(/^\s*/);
+                    const pIndentLen = pIndentMatch ? pIndentMatch[0].length : 0;
+
+                    if (pIndentLen === targetIndentLen) {
+                        // 同じインデントレベル(深くなった先と同じレベル)の行を発見
+                        const listMatch = pLine.match(/^(\s*)(\d+)\./);
+                        if (listMatch) {
+                            nextNum = parseInt(listMatch[2]) + 1;
+                        }
+                        if (pLine.trim().length > 0) break;
+                    } else if (pIndentLen < targetIndentLen) {
+                        // 親レベルが見つかったら、そこまで兄弟はいなかったということ
+                        if (pLine.trim().length > 0) break;
+                    }
+                }
+
+                newText = lines.map((line, i) => {
+                    let indentedLine = indentUnit + line;
+
+                    // 番号付きリストなら番号を更新
+                    const listMatch = indentedLine.match(/^(\s*)(\d+)\.(\s+)/);
+                    if (listMatch) {
+                        indentedLine = indentedLine.replace(/^(\s*)\d+\./, `$1${nextNum}.`);
+                        nextNum++;
+                    }
+
+                    const diff = indentedLine.length - line.length;
+                    if (i === 0) newStart += diff;
+                    newEnd += diff;
+
+                    return indentedLine;
+                }).join('\n');
+            }
+
+            // テキスト更新
+            this.value = value.substring(0, lineStart) + newText + value.substring(endLinePos);
+
+            // カーソル位置復元
+            this.selectionStart = Math.max(lineStart, newStart);
+            this.selectionEnd = Math.max(lineStart, newEnd);
+
+            updatePreview();
+        }
+    });
+
+
+    // --- コピー機能 ---
+    async function copyToClipboard(type) {
+        let text = "";
+        if (type === 'markdown') {
+            text = editor.value;
+        } else if (type === 'html') {
+            text = preview.innerHTML;
+        }
+
+        try {
+            await navigator.clipboard.writeText(text);
+            alert(`${type === 'markdown' ? 'Markdown' : 'HTML'} をクリップボードにコピーしました！`);
+        } catch (err) {
+            console.error('コピーに失敗しました:', err);
+            alert('コピーに失敗しました');
+        }
+    }
+
+    // --- ダウンロード機能 ---
+    function downloadFile(type) {
+        let content = "";
+        let mimeType = "";
+        let fileName = "";
+
+        if (type === 'md') {
+            content = editor.value;
+            mimeType = "text/markdown";
+            fileName = "document.md";
+        } else if (type === 'html') {
+            // 完全なHTMLファイルとしてDLさせるためのテンプレート
+            // ハイライト用CSSも含める
+            const style = document.querySelector('style').textContent;
+            const isDark = document.body.classList.contains('dark-mode');
+            const hljsCss = isDark
+                ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
+                : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+
+            content = `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -618,66 +617,66 @@ th { background-color: ${isDark ? '#21262d' : '#f0f0f0'}; }
 ${preview.innerHTML}
 </body>
 </html>`;
-                mimeType = "text/html";
-                fileName = "document.html";
-            }
-
-            const blob = new Blob([content], { type: mimeType });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            mimeType = "text/html";
+            fileName = "document.html";
         }
 
-        // --- テーマ切り替え ---
-        let isDark = false;
-        function toggleTheme() {
-            isDark = !isDark;
-            document.body.classList.toggle('dark-mode', isDark);
-            document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 
-            // Highlight.js テーマ切り替え
-            document.getElementById('hljs-light').disabled = isDark;
-            document.getElementById('hljs-dark').disabled = !isDark;
+    // --- テーマ切り替え ---
+    let isDark = false;
+    function toggleTheme() {
+        isDark = !isDark;
+        document.body.classList.toggle('dark-mode', isDark);
+        document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+
+        // Highlight.js テーマ切り替え
+        document.getElementById('hljs-light').disabled = isDark;
+        document.getElementById('hljs-dark').disabled = !isDark;
+    }
+
+    // --- モーダル制御 ---
+    function openHelp() {
+        document.getElementById('helpModal').classList.add('active');
+    }
+
+    function closeHelp() {
+        document.getElementById('helpModal').classList.remove('active');
+    }
+
+    function closeHelpOnOutside(e) {
+        if (e.target.id === 'helpModal') {
+            closeHelp();
         }
+    }
 
-        // --- モーダル制御 ---
-        function openHelp() {
-            document.getElementById('helpModal').classList.add('active');
+    // --- プロンプトツール制御 ---
+    function openPromptModal() {
+        document.getElementById('promptModal').classList.add('active');
+    }
+
+    function closePrompt() {
+        document.getElementById('promptModal').classList.remove('active');
+    }
+
+    function closePromptOnOutside(e) {
+        if (e.target.id === 'promptModal') {
+            closePrompt();
         }
+    }
 
-        function closeHelp() {
-            document.getElementById('helpModal').classList.remove('active');
-        }
-
-        function closeHelpOnOutside(e) {
-            if (e.target.id === 'helpModal') {
-                closeHelp();
-            }
-        }
-
-        // --- プロンプトツール制御 ---
-        function openPromptModal() {
-            document.getElementById('promptModal').classList.add('active');
-        }
-
-        function closePrompt() {
-            document.getElementById('promptModal').classList.remove('active');
-        }
-
-        function closePromptOnOutside(e) {
-            if (e.target.id === 'promptModal') {
-                closePrompt();
-            }
-        }
-
-        // プロンプトテンプレート定義
-        const PROMPT_TEMPLATES = {
-            'meta': `# 命令
+    // プロンプトテンプレート定義
+    const PROMPT_TEMPLATES = {
+        'meta': `# 命令
 あなたはプロンプトエンジニアリングの専門家です。以下の【目的】を達成するために、AIに対する最適なプロンプトを作成してください。
 
 # 目的
@@ -690,7 +689,7 @@ ${preview.innerHTML}
 
 # 出力
 作成したプロンプトをそのままコピーして使えるよう、コードブロックの中に書き出してください。`,
-            'summary': `# 命令
+        'summary': `# 命令
 以下の文章を要約してください。
 
 # 条件
@@ -700,7 +699,7 @@ ${preview.innerHTML}
 
 # 対象の文章
 [ここに文章を入力]`,
-            'proofread': `# 命令
+        'proofread': `# 命令
 以下の文章を校正・推敲してください。
 
 # 確認事項
@@ -711,7 +710,7 @@ ${preview.innerHTML}
 
 # 対象の文章
 [ここに文章を入力]`,
-            'translate': `# 命令
+        'translate': `# 命令
 以下の文章を[英語]に翻訳してください。
 
 # 条件
@@ -720,7 +719,7 @@ ${preview.innerHTML}
 
 # 対象の文章
 [ここに文章を入力]`,
-            'code': `# 命令
+        'code': `# 命令
 以下のコードの処理内容を、初心者エンジニアにもわかるように解説してください。
 
 # 対象のコード
@@ -732,7 +731,7 @@ ${preview.innerHTML}
 1. 全体の処理の概要
 2. 各行・またはブロックごとの詳細な解説
 3. このコードの改善点があれば1〜2点`,
-            'idea': `# 命令
+        'idea': `# 命令
 [テーマ]に関するアイデアを[10個]出してください。
 
 # テーマ
@@ -741,64 +740,56 @@ ${preview.innerHTML}
 # 条件
 - 既存の枠にとらわれない斬新な視点を含めること
 - 各アイデアに対して、「なぜそれが良いのか」という理由も簡潔に添えること`
-        };
+    };
 
-        function insertPrompt(type) {
-            const promptText = PROMPT_TEMPLATES[type];
-            if (!promptText) return;
+    function insertPrompt(type) {
+        const promptText = PROMPT_TEMPLATES[type];
+        if (!promptText) return;
 
-            const start = editor.selectionStart;
-            const end = editor.selectionEnd;
-            const text = editor.value;
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const text = editor.value;
 
-            // 挿入前に改行が必要かチェック
-            let insertText = promptText;
-            if (start > 0 && text[start - 1] !== '\n') {
-                insertText = '\n\n' + insertText;
-            }
-            // 挿入後にも改行を追加
-            insertText = insertText + '\n\n';
-
-            editor.value = text.substring(0, start) + insertText + text.substring(end);
-
-            // カーソル位置を更新（挿入したテキストの後ろ）
-            editor.selectionStart = editor.selectionEnd = start + insertText.length;
-            editor.focus();
-
-            // 変更内容をセーブ＆プレビュー更新
-            updatePreview();
-            closePrompt();
+        // 挿入前に改行が必要かチェック
+        let insertText = promptText;
+        if (start > 0 && text[start - 1] !== '\n') {
+            insertText = '\n\n' + insertText;
         }
+        // 挿入後にも改行を追加
+        insertText = insertText + '\n\n';
 
-        // --- スクロール同期 (簡易版) ---
-        let isSyncingEditor = false;
-        let isSyncingPreview = false;
+        editor.value = text.substring(0, start) + insertText + text.substring(end);
 
-        editor.addEventListener('scroll', function () {
-            if (!isSyncingEditor) {
-                isSyncingPreview = true;
-                const percentage = this.scrollTop / (this.scrollHeight - this.clientHeight);
-                preview.scrollTop = percentage * (preview.scrollHeight - preview.clientHeight);
-            }
-            isSyncingEditor = false;
-        });
+        // カーソル位置を更新（挿入したテキストの後ろ）
+        editor.selectionStart = editor.selectionEnd = start + insertText.length;
+        editor.focus();
 
-        preview.addEventListener('scroll', function () {
-            if (!isSyncingPreview) {
-                isSyncingEditor = true;
-                const percentage = this.scrollTop / (this.scrollHeight - this.clientHeight);
-                editor.scrollTop = percentage * (editor.scrollHeight - editor.clientHeight);
-            }
-            isSyncingPreview = false;
-        });
+        // 変更内容をセーブ＆プレビュー更新
+        updatePreview();
+        closePrompt();
+    }
 
-    </script>
+    // --- スクロール同期 (簡易版) ---
+    let isSyncingEditor = false;
+    let isSyncingPreview = false;
 
-    <!-- 固定フッター -->
-    <footer class="footer-fixed">
-        <div class="footer-content">
-            <span class="footer-version">v1.0.1</span>
-            <span class="footer-copyright">&copy; <a href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">クロスロード株式会社</a></span>
-        </div>
-    </footer>
-</div>
+    editor.addEventListener('scroll', function () {
+        if (!isSyncingEditor) {
+            isSyncingPreview = true;
+            const percentage = this.scrollTop / (this.scrollHeight - this.clientHeight);
+            preview.scrollTop = percentage * (preview.scrollHeight - preview.clientHeight);
+        }
+        isSyncingEditor = false;
+    });
+
+    preview.addEventListener('scroll', function () {
+        if (!isSyncingPreview) {
+            isSyncingEditor = true;
+            const percentage = this.scrollTop / (this.scrollHeight - this.clientHeight);
+            editor.scrollTop = percentage * (editor.scrollHeight - editor.clientHeight);
+        }
+        isSyncingPreview = false;
+    });
+
+</script>
+{% include footer.html %}
