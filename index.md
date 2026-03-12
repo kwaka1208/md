@@ -433,7 +433,7 @@ permalink: /
             const endLinePos = lineEnd === -1 ? value.length : lineEnd;
 
             const lines = value.substring(lineStart, endLinePos).split('\n');
-            const indentUnit = '    '; // 4スペース
+            const indentUnit = '  ';
 
             let newText = '';
             let newStart = start;
@@ -552,11 +552,9 @@ permalink: /
             // カーソル位置復元
             this.selectionStart = Math.max(lineStart, newStart);
             this.selectionEnd = Math.max(lineStart, newEnd);
-
             updatePreview();
         }
     });
-
 
     // --- コピー機能 ---
     async function copyToClipboard(type) {
@@ -582,14 +580,21 @@ permalink: /
         let mimeType = "";
         let fileName = "";
 
+        // --- 追加: 現在のファイルのタイトルを取得 ---
+        // `currentFileId` から現在選択中のファイルを探します
+        const currentFile = files.find(f => f.id === currentFileId);
+        // ファイルが見つかればそのタイトルを、なければデフォルトの 'document' をファイル名に使用します
+        const baseFileName = currentFile && currentFile.title ? currentFile.title : 'document';
+
         if (type === 'md') {
             content = editor.value;
             mimeType = "text/markdown";
-            fileName = "document.md";
+            fileName = `${baseFileName}.md`; // 修正: 現在の書類の名前を使用
         } else if (type === 'html') {
-            // 完全なHTMLファイルとしてDLさせるためのテンプレート
-            // ハイライト用CSSも含める
-            const style = document.querySelector('style').textContent;
+            // 安全に style タグを取得（存在しない場合のエラー回避）
+            const styleElement = document.querySelector('style');
+            const style = styleElement ? styleElement.textContent : ''; 
+            
             const isDark = document.body.classList.contains('dark-mode');
             const hljsCss = isDark
                 ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
@@ -599,6 +604,7 @@ permalink: /
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<title>${baseFileName}</title> <!-- 修正: titleタグもドキュメント名に合わせました -->
 <link rel="stylesheet" href="${hljsCss}">
 <style>
 /* Preview Styles Only */
@@ -618,7 +624,7 @@ ${preview.innerHTML}
 </body>
 </html>`;
             mimeType = "text/html";
-            fileName = "document.html";
+            fileName = `${baseFileName}.html`; // 修正: "document.html" から現在の書類の名前に変更
         }
 
         const blob = new Blob([content], { type: mimeType });
@@ -676,70 +682,12 @@ ${preview.innerHTML}
 
     // プロンプトテンプレート定義
     const PROMPT_TEMPLATES = {
-        'meta': `# 命令
-あなたはプロンプトエンジニアリングの専門家です。以下の【目的】を達成するために、AIに対する最適なプロンプトを作成してください。
-
-# 目的
-[ここにあなたが達成したい目的を入力してください。例：新商品のキャッチコピーを考えてほしい]
-
-# 条件
-- プロンプト内には人間が後から入力・調整しやすいように変数（例：[ターゲット層]、[商品の特徴]など）を設けること。
-- 出力の形式（箇条書き、表、文章形式など）を明確に指定する項目を設けること。
-- 必要に応じて、AIが質の高い回答を出すための「制約条件」や「参考情報」欄を設けること。
-
-# 出力
-作成したプロンプトをそのままコピーして使えるよう、コードブロックの中に書き出してください。`,
-        'summary': `# 命令
-以下の文章を要約してください。
-
-# 条件
-- 文字数：[300文字]程度
-- 要点を[3つ]の箇条書きでまとめること
-- 誰にでもわかりやすい表現で記述すること
-
-# 対象の文章
-[ここに文章を入力]`,
-        'proofread': `# 命令
-以下の文章を校正・推敲してください。
-
-# 確認事項
-- 誤字・脱字がないか
-- 日本語として不自然な表現や、回りくどい言い回しがないか
-- 文末表現（です・ます調 / だ・である調）が統一されているか
-- 【オプション】より魅力的な文章にするための改善案があれば提示すること
-
-# 対象の文章
-[ここに文章を入力]`,
-        'translate': `# 命令
-以下の文章を[英語]に翻訳してください。
-
-# 条件
-- [ビジネス/カジュアル]なトーンで翻訳すること
-- 直訳ではなく、ネイティブが自然に感じる表現を心がけること
-
-# 対象の文章
-[ここに文章を入力]`,
-        'code': `# 命令
-以下のコードの処理内容を、初心者エンジニアにもわかるように解説してください。
-
-# 対象のコード
-\`\`\`[言語名]
-[ここにコードを入力]
-\`\`\`
-
-# 出力形式
-1. 全体の処理の概要
-2. 各行・またはブロックごとの詳細な解説
-3. このコードの改善点があれば1〜2点`,
-        'idea': `# 命令
-[テーマ]に関するアイデアを[10個]出してください。
-
-# テーマ
-[ここにテーマを入力]
-
-# 条件
-- 既存の枠にとらわれない斬新な視点を含めること
-- 各アイデアに対して、「なぜそれが良いのか」という理由も簡潔に添えること`
+        'meta': `# 命令\nあなたはプロンプトエンジニアリングの専門家です。以下の【目的】を達成するために、AIに対する最適なプロンプトを作成してください。\n\n# 目的\n[ここにあなたが達成したい目的を入力してください。例：新商品のキャッチコピーを考えてほしい]\n\n# 条件\n- プロンプト内には人間が後から入力・調整しやすいように変数（例：[ターゲット層]、[商品の特徴]など）を設けること。\n- 出力の形式（箇条書き、表、文章形式など）を明確に指定する項目を設けること。\n- 必要に応じて、AIが質の高い回答を出すための「制約条件」や「参考情報」欄を設けること。\n\n# 出力\n作成したプロンプトをそのままコピーして使えるよう、コードブロックの中に書き出してください。`,
+        'summary': `# 命令\n以下の文章を要約してください。\n\n# 条件\n- 文字数：[300文字]程度\n- 要点を[3つ]の箇条書きでまとめること\n- 誰にでもわかりやすい表現で記述すること\n\n# 対象の文章\n[ここに文章を入力]`,
+        'proofread': `# 命令\n以下の文章を校正・推敲してください。\n\n# 確認事項\n- 誤字・脱字がないか\n- 日本語として不自然な表現や、回りくどい言い回しがないか\n- 文末表現（です・ます調 / だ・である調）が統一されているか\n- 【オプション】より魅力的な文章にするための改善案があれば提示すること\n\n# 対象の文章\n[ここに文章を入力]`,
+        'translate': `# 命令\n以下の文章を[英語]に翻訳してください。\n\n# 条件\n- [ビジネス/カジュアル]なトーンで翻訳すること\n- 直訳ではなく、ネイティブが自然に感じる表現を心がけること\n\n# 対象の文章\n[ここに文章を入力]`,
+        'code': `# 命令\n以下のコードの処理内容を、初心者エンジニアにもわかるように解説してください。\n\n# 対象のコード\n\`\`\`[言語名]\n[ここにコードを入力]\n\`\`\`\n\n# 出力形式\n1. 全体の処理の概要\n2. 各行・またはブロックごとの詳細な解説\n3. このコードの改善点があれば1〜2点`,
+        'idea': `# 命令\n[テーマ]に関するアイデアを[10個]出してください。\n\n# テーマ\n[ここにテーマを入力]\n\n# 条件\n- 既存の枠にとらわれない斬新な視点を含めること\n- 各アイデアに対して、「なぜそれが良いのか」という理由も簡潔に添えること`
     };
 
     function insertPrompt(type) {
@@ -769,7 +717,7 @@ ${preview.innerHTML}
         closePrompt();
     }
 
-    // --- スクロール同期 (簡易版) ---
+    // --- スクロール同期 ---
     let isSyncingEditor = false;
     let isSyncingPreview = false;
 
