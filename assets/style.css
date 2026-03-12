@@ -13,15 +13,13 @@
 }
 /* フッター固定用スタイル */
 .footer-fixed {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    position: static;
     width: 100%;
     background: var(--footer-bg, #f8f9fa);
     color: var(--footer-text, #333);
     border-top: 1px solid var(--border-color, #ddd);
     font-size: 0.95rem;
-    z-index: 100;
+    /* z-index: 100; */
 }
 .footer-content {
     display: flex;

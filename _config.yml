@@ -6,7 +6,7 @@ description: >
   ブラウザで軽快に動作するMarkdownエディタ。
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://md.crssrds.jp" # the base hostname & protocol for your site
-version: "v1.1.0"
+version: "v1.1.1"
 copyright: crossroads inc.
 # Build settings
 theme: minima
