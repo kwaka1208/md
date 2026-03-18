@@ -103,31 +103,31 @@ function closePromptOnOutside(e) {
     }
 }
 
-const PROMPT_TEMPLATES = {
-    'meta': `# 命令\nあなたはプロンプトエンジニアリングの専門家です。以下の【目的】を達成するために、AIに対する最適なプロンプトを作成してください。\n\n# 目的\n[ここにあなたが達成したい目的を入力してください。例：新商品のキャッチコピーを考えてほしい]\n\n# 条件\n- プロンプト内には人間が後から入力・調整しやすいように変数（例：[ターゲット層]、[商品の特徴]など）を設けること。\n- 出力の形式（箇条書き、表、文章形式など）を明確に指定する項目を設けること。\n- 必要に応じて、AIが質の高い回答を出すための「制約条件」や「参考情報」欄を設けること。\n# 出力\n作成したプロンプトをそのままコピーして使えるよう、コードブロックの中に書き出してください。`,
-    'summary': `# 命令\n以下の文章を要約してください。\n\n# 条件\n- 文字数：[300文字]程度\n- 要点を[3つ]の箇条書きでまとめること\n- 誰にでもわかりやすい表現で記述すること\n\n# 対象の文章\n[ここに文章を入力]`,
-    'proofread': `# 命令\n以下の文章を校正・推敲してください。\n\n# 確認事項\n- 誤字・脱字がないか\n- 日本語として不自然な表現や、回りくどい言い回しがないか\n- 文末表現（です・ます調 / だ・である調）が統一されているか\n- 【オプション】より魅力的な文章にするための改善案があれば提示すること\n\n# 対象の文章\n[ここに文章を入力]`,
-    'translate': `# 命令\n以下の文章を[英語]に翻訳してください。\n\n# 条件\n- [ビジネス/カジュアル]なトーンで翻訳すること\n- 直訳ではなく、ネイティブが自然に感じる表現を心がけること\n\n# 対象の文章\n[ここに文章を入力]`,
-    'code': `# 命令\n以下のコードの処理内容を、初心者エンジニアにもわかるように解説してください。\n\n# 対象のコード\n\`\`\`[言語名]\n[ここにコードを入力]\n\`\`\`\n\n# 出力形式\n1. 全体の処理の概要\n2. 各行・またはブロックごとの詳細な解説\n3. このコードの改善点があれば1〜2点`,
-    'idea': `# 命令\n[テーマ]に関するアイデアを[10個]出してください。\n\n# テーマ\n[ここにテーマを入力]\n\n# 条件\n- 既存の枠にとらわれない斬新な視点を含めること\n- 各アイデアに対して、「なぜそれが良いのか」という理由も簡潔に添えること`
-};
-
-function insertPrompt(type) {
-    const promptText = PROMPT_TEMPLATES[type];
-    if (!promptText) return;
-    const start = editor.selectionStart;
-    const end = editor.selectionEnd;
-    const text = editor.value;
-    let insertText = promptText;
-    if (start > 0 && text[start - 1] !== '\n') {
-        insertText = '\n\n' + insertText;
+async function insertPrompt(type) {
+    try {
+        const response = await fetch(`/assets/prompts/${type}.md`);
+        if (!response.ok) {
+            throw new Error('ネットワークエラーによりプロンプトの取得に失敗しました。');
+        }
+        const promptText = await response.text();
+        
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const text = editor.value;
+        let insertText = promptText;
+        if (start > 0 && text[start - 1] !== '\n') {
+            insertText = '\n\n' + insertText;
+        }
+        insertText = insertText + '\n\n';
+        editor.value = text.substring(0, start) + insertText + text.substring(end);
+        editor.selectionStart = editor.selectionEnd = start + insertText.length;
+        editor.focus();
+        updatePreview();
+        closePrompt();
+    } catch (error) {
+        console.error('プロンプトの読み込みエラー:', error);
+        alert('プロンプトテンプレートの読み込みに失敗しました。');
     }
-    insertText = insertText + '\n\n';
-    editor.value = text.substring(0, start) + insertText + text.substring(end);
-    editor.selectionStart = editor.selectionEnd = start + insertText.length;
-    editor.focus();
-    updatePreview();
-    closePrompt();
 }
 
 // --- スクロール同期 (簡易版) ---
