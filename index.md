@@ -15,31 +15,15 @@ permalink: /
 <div class="controls">
     <!-- ファイル管理UI -->
     <select id="fileSelect" class="file-select" onchange="loadFile()"></select>
-    <button class="btn" onclick="createNewFile()" title="新規作成">➕ 新規</button>
-    <button class="btn" onclick="renameCurrentFile()" title="名前変更">✏️ 名前変更</button>
-    <button class="btn" onclick="deleteCurrentFile()" title="削除">🗑️ 削除</button>
-
-    <div class="divider"></div>
-
-    <button class="btn" onclick="copyToClipboard('html')">📋 HTMLをコピー</button>
-    <button class="btn" onclick="copyToClipboard('markdown')">📋 MDをコピー</button>
+    <button class="btn" onclick="createNewFile()" title="新規作成">➕<span class="btn-text"> 新規</span></button>
+    <button class="btn" onclick="renameCurrentFile()" title="名前変更">✏️<span class="btn-text"> 名前変更</span></button>
+    <button class="btn" onclick="deleteCurrentFile()" title="削除">🗑️<span class="btn-text"> 削除</span></button>
 
     <div class="divider"></div>
 
     <input type="file" id="importZipInput" accept=".zip" style="display:none;" onchange="importZip(event)">
 
-    <div class="dropdown">
-        <button class="btn dropbtn" onclick="toggleDropdown()">📁 ファイル ▾</button>
-        <div class="dropdown-content" id="downloadDropdown">
-            <div class="dropdown-header">エクスポート</div>
-            <a onclick="downloadFile('md')">📄 Markdownファイル</a>
-            <a onclick="downloadFile('html')">📄 HTMLファイル</a>
-            <a onclick="exportZip()">📦 すべてのMarkdownファイル</a>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-header">インポート</div>
-            <a onclick="document.getElementById('importZipInput').click()">📂 Markdownファイル (ZIP)</a>
-        </div>
-    </div>
+    <button class="btn" onclick="openFileModal()" title="ファイル操作">📁<span class="btn-text"> ファイル操作</span></button>
 
     <!-- コピーライト表記（フッターに移動） -->
 </div>
@@ -174,6 +158,35 @@ permalink: /
             <div style="margin-top: 25px;">
                 <button class="btn btn-primary" onclick="acceptDisclaimer()"
                     style="width: 100%; justify-content: center; font-size: 1rem; padding: 10px;">了解しました</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ファイル操作モーダル -->
+<div class="modal-overlay" id="fileModal" onclick="closeFileModalOnOutside(event)">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h2>📁 ファイル操作</h2>
+            <button class="modal-close" onclick="closeFileModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">クリップボードへコピー</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <button class="btn" style="justify-content: flex-start;" onclick="copyToClipboard('markdown'); closeFileModal();">📝 Markdown形式</button>
+                <button class="btn" style="justify-content: flex-start;" onclick="copyToClipboard('html'); closeFileModal();">🌐 HTML形式</button>
+            </div>
+
+            <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">エクスポート</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <button class="btn" style="justify-content: flex-start;" onclick="downloadFile('md'); closeFileModal();">📝 Markdown形式</button>
+                <button class="btn" style="justify-content: flex-start;" onclick="downloadFile('html'); closeFileModal();">🌐 HTML形式</button>
+                <button class="btn" style="justify-content: flex-start;" onclick="exportZip(); closeFileModal();">📦 すべてのMarkdown形式 (ZIP)</button>
+            </div>
+
+            <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">インポート</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn" style="justify-content: flex-start;" onclick="document.getElementById('importZipInput').click(); closeFileModal();">📂 Markdown形式 (ZIP)</button>
             </div>
         </div>
     </div>
@@ -780,23 +793,20 @@ ${preview.innerHTML}
         document.getElementById('hljs-dark').disabled = !isDark;
     }
 
-    // --- ドロップダウン制御 ---
-    function toggleDropdown() {
-        document.getElementById("downloadDropdown").classList.toggle("show");
+    // --- ファイル操作モーダル制御 ---
+    function openFileModal() {
+        document.getElementById('fileModal').classList.add('active');
     }
 
-    // メニュー外クリックで閉じる
-    window.addEventListener('click', function(event) {
-        if (!event.target.matches('.dropbtn')) {
-            const dropdowns = document.getElementsByClassName("dropdown-content");
-            for (let i = 0; i < dropdowns.length; i++) {
-                const openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
+    function closeFileModal() {
+        document.getElementById('fileModal').classList.remove('active');
+    }
+
+    function closeFileModalOnOutside(e) {
+        if (e.target.id === 'fileModal') {
+            closeFileModal();
         }
-    });
+    }
 
     // --- モーダル制御 ---
     function openHelp() {
