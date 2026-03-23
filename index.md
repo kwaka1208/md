@@ -6,7 +6,7 @@ permalink: /
 <header>
     <h1>Markdown Editor</h1>
     <div style="display: flex; gap: 10px; align-items: center;">
-        <button class="header-btn" onclick="openPromptModal()" title="AIプロンプト">💡 AIへの指示を作る</button>
+        <button class="header-btn" onclick="openPromptModal()" title="AIへの指示を作る">💡<span class="btn-text"> AIへの指示を作る</span></button>
         <button class="theme-toggle" onclick="openHelp()" title="使い方">❓</button>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="ダークモード切替">🌙</button>
     </div>
@@ -17,7 +17,6 @@ permalink: /
     <select id="fileSelect" class="file-select" onchange="loadFile()"></select>
     <button class="btn" onclick="createNewFile()" title="新規作成">➕<span class="btn-text"> 新規</span></button>
     <button class="btn" onclick="renameCurrentFile()" title="名前変更">✏️<span class="btn-text"> 名前変更</span></button>
-    <button class="btn" onclick="deleteCurrentFile()" title="削除">🗑️<span class="btn-text"> 削除</span></button>
 
     <div class="divider"></div>
 
@@ -185,8 +184,13 @@ permalink: /
             </div>
 
             <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">インポート</h3>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
                 <button class="btn" style="justify-content: flex-start;" onclick="document.getElementById('importZipInput').click(); closeFileModal();">📂 Markdown形式 (ZIP)</button>
+            </div>
+
+            <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px; color: #d73a49;">危険な操作</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn" style="justify-content: flex-start; color: #d73a49; border-color: #ffdce0; background-color: #ffeef0;" onclick="deleteCurrentFile(); closeFileModal();">🗑️ 現在のファイルを削除</button>
             </div>
         </div>
     </div>
