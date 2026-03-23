@@ -23,8 +23,23 @@ permalink: /
 
     <button class="btn" onclick="copyToClipboard('html')">📋 HTMLをコピー</button>
     <button class="btn" onclick="copyToClipboard('markdown')">📋 MDをコピー</button>
-    <button class="btn" onclick="downloadFile('md')">⬇️ .md DL</button>
-    <button class="btn" onclick="downloadFile('html')">⬇️ .html DL</button>
+
+    <div class="divider"></div>
+
+    <input type="file" id="importZipInput" accept=".zip" style="display:none;" onchange="importZip(event)">
+
+    <div class="dropdown">
+        <button class="btn dropbtn" onclick="toggleDropdown()">📁 ファイル ▾</button>
+        <div class="dropdown-content" id="downloadDropdown">
+            <div class="dropdown-header">エクスポート</div>
+            <a onclick="downloadFile('md')">📄 Markdownファイル</a>
+            <a onclick="downloadFile('html')">📄 HTMLファイル</a>
+            <a onclick="exportZip()">📦 すべてのMarkdownファイル</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">インポート</div>
+            <a onclick="document.getElementById('importZipInput').click()">📂 Markdownファイル (ZIP)</a>
+        </div>
+    </div>
 
     <!-- コピーライト表記（フッターに移動） -->
 </div>
@@ -638,6 +653,121 @@ ${preview.innerHTML}
         URL.revokeObjectURL(url);
     }
 
+    // --- 一括エクスポート機能 ---
+    async function exportZip() {
+        if (files.length === 0) {
+            alert("エクスポートするドキュメントがありません。");
+            return;
+        }
+
+        try {
+            const JSZipObj = window.JSZip; 
+            if (!JSZipObj) {
+                alert("JSZipライブラリがロードされていません。リロードして再試行してください。");
+                return;
+            }
+
+            const zip = new JSZipObj();
+            
+            // ファイル名重複対策用
+            const usedNames = new Set();
+
+            files.forEach((f, idx) => {
+                let title = f.title.trim() || `Untitled_${idx + 1}`;
+                if (!title.toLowerCase().endsWith('.md')) {
+                    title += '.md';
+                }
+                
+                // 同名ファイルがあれば連番をつける
+                let uniqueTitle = title;
+                let counter = 1;
+                while (usedNames.has(uniqueTitle)) {
+                    uniqueTitle = title.replace(/\.md$/i, `_${counter}.md`);
+                    counter++;
+                }
+                usedNames.add(uniqueTitle);
+
+                zip.file(uniqueTitle, f.content || '');
+            });
+
+            const blob = await zip.generateAsync({ type: "blob" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const HH = String(now.getHours()).padStart(2, '0');
+            const MM = String(now.getMinutes()).padStart(2, '0');
+            
+            a.download = `md_export_${yyyy}${mm}${dd}_${HH}${MM}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("ZIPエクスポートエラー", error);
+            alert("ZIPエクスポートに失敗しました。");
+        }
+    }
+
+    // --- 一括インポート機能 ---
+    async function importZip(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        try {
+            const JSZipObj = window.JSZip;
+            if (!JSZipObj) {
+                alert("JSZipライブラリがロードされていません。");
+                return;
+            }
+
+            const zip = new JSZipObj();
+            const contents = await zip.loadAsync(file);
+
+            let importedCount = 0;
+            const newFiles = [];
+            
+            for (const [filename, zipEntry] of Object.entries(contents.files)) {
+                if (!zipEntry.dir && filename.toLowerCase().endsWith('.md')) {
+                    const textContent = await zipEntry.async("string");
+                    const title = filename.replace(/\.md$/i, '').split('/').pop() || 'Imported Document';
+                    
+                    newFiles.push({
+                        id: 'doc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        title: title,
+                        content: textContent || ''
+                    });
+                    
+                    importedCount++;
+                }
+            }
+
+            if (importedCount > 0) {
+                files = files.concat(newFiles);
+                currentFileId = newFiles[newFiles.length - 1].id;
+                
+                saveFilesToStorage();
+                localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
+                updateFileList();
+                loadFile();
+                
+                alert(`${importedCount}個のファイルをインポートしました。`);
+            } else {
+                alert("ZIPファイル内に有効な .md ファイルが見つかりませんでした。");
+            }
+
+        } catch (error) {
+            console.error("ZIPインポートエラー", error);
+            alert("ZIPファイルの読み込みに失敗しました。ファイルが破損している可能性があります。");
+        } finally {
+            event.target.value = '';
+        }
+    }
+
     // --- テーマ切り替え ---
     let isDark = false;
     function toggleTheme() {
@@ -649,6 +779,24 @@ ${preview.innerHTML}
         document.getElementById('hljs-light').disabled = isDark;
         document.getElementById('hljs-dark').disabled = !isDark;
     }
+
+    // --- ドロップダウン制御 ---
+    function toggleDropdown() {
+        document.getElementById("downloadDropdown").classList.toggle("show");
+    }
+
+    // メニュー外クリックで閉じる
+    window.addEventListener('click', function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            const dropdowns = document.getElementsByClassName("dropdown-content");
+            for (let i = 0; i < dropdowns.length; i++) {
+                const openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    });
 
     // --- モーダル制御 ---
     function openHelp() {
