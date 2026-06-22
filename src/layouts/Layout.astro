@@ -1,11 +1,13 @@
 ---
+import pkg from '../../package.json';
+
 interface Props {
   title?: string;
 }
-const { title = "Markdown Editor" } = Astro.props;
-const siteUrl = "https://md.crssrds.jp";
-const version = "v1.30";
-const copyright = "crossroads inc.";
+const { title = 'Markdown Editor' } = Astro.props;
+const siteUrl = 'https://md.crssrds.jp';
+const version = `v${pkg.version}`;
+const copyright = 'crossroads inc.';
 ---
 
 <!doctype html>
