@@ -400,7 +400,7 @@ permalink: /
             }
         }
 
-        const htmlContent = marked.parse(markdownText);
+        const htmlContent = DOMPurify.sanitize(marked.parse(markdownText));
         preview.innerHTML = htmlContent;
     }
 
