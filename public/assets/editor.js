@@ -197,6 +197,8 @@ function updatePreview() {
     preview.innerHTML = htmlContent;
 }
 
+editor.addEventListener('input', updatePreview);
+
 editor.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         if (e.isComposing) return;
