@@ -638,4 +638,44 @@ preview.addEventListener('scroll', function () {
     isSyncingPreview = false;
 });
 
+// ヘッダー
+document.getElementById('promptBtn').addEventListener('click', openPromptModal);
+document.getElementById('helpBtn').addEventListener('click', openHelp);
+document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+
+// コントロールバー
+document.getElementById('fileSelect').addEventListener('change', loadFile);
+document.getElementById('newFileBtn').addEventListener('click', createNewFile);
+document.getElementById('renameBtn').addEventListener('click', renameCurrentFile);
+document.getElementById('importZipInput').addEventListener('change', importZip);
+document.getElementById('fileModalBtn').addEventListener('click', openFileModal);
+
+// ヘルプモーダル
+document.getElementById('helpModal').addEventListener('click', closeHelpOnOutside);
+document.getElementById('helpCloseBtn').addEventListener('click', closeHelp);
+
+// プロンプトモーダル
+document.getElementById('promptModal').addEventListener('click', closePromptOnOutside);
+document.getElementById('promptCloseBtn').addEventListener('click', closePrompt);
+document.getElementById('insertMetaBtn').addEventListener('click', () => insertPrompt('meta'));
+document.getElementById('btnSummary').addEventListener('click', () => insertPrompt('summary'));
+document.getElementById('btnProofread').addEventListener('click', () => insertPrompt('proofread'));
+document.getElementById('btnTranslate').addEventListener('click', () => insertPrompt('translate'));
+document.getElementById('btnCode').addEventListener('click', () => insertPrompt('code'));
+document.getElementById('btnIdea').addEventListener('click', () => insertPrompt('idea'));
+
+// 免責事項モーダル
+document.getElementById('acceptDisclaimerBtn').addEventListener('click', acceptDisclaimer);
+
+// ファイル操作モーダル
+document.getElementById('fileModal').addEventListener('click', closeFileModalOnOutside);
+document.getElementById('fileModalCloseBtn').addEventListener('click', closeFileModal);
+document.getElementById('copyMarkdownBtn').addEventListener('click', () => { copyToClipboard('markdown'); closeFileModal(); });
+document.getElementById('copyHtmlBtn').addEventListener('click', () => { copyToClipboard('html'); closeFileModal(); });
+document.getElementById('downloadMdBtn').addEventListener('click', () => { downloadFile('md'); closeFileModal(); });
+document.getElementById('downloadHtmlBtn').addEventListener('click', () => { downloadFile('html'); closeFileModal(); });
+document.getElementById('exportZipBtn').addEventListener('click', () => { exportZip(); closeFileModal(); });
+document.getElementById('importZipBtn').addEventListener('click', () => { document.getElementById('importZipInput').click(); closeFileModal(); });
+document.getElementById('deleteFileBtn').addEventListener('click', () => { deleteCurrentFile(); closeFileModal(); });
+
 init();

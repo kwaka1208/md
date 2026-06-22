@@ -5,21 +5,21 @@ import Layout from '../layouts/Layout.astro';
 <header>
     <h1>Markdown Editor</h1>
     <div style="display: flex; gap: 10px; align-items: center;">
-        <button class="header-btn" onclick="openPromptModal()" title="AIへの指示を作る">💡<span class="btn-text"> AIへの指示を作る</span></button>
-        <button class="theme-toggle" onclick="openHelp()" title="使い方">❓</button>
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="ダークモード切替">🌙</button>
+        <button class="header-btn" id="promptBtn" title="AIへの指示を作る">💡<span class="btn-text"> AIへの指示を作る</span></button>
+        <button class="theme-toggle" id="helpBtn" title="使い方">❓</button>
+        <button class="theme-toggle" id="themeBtn" title="ダークモード切替">🌙</button>
     </div>
 </header>
 
 <div class="controls">
-    <select id="fileSelect" class="file-select" onchange="loadFile()"></select>
-    <button class="btn" onclick="createNewFile()" title="新規作成">➕<span class="btn-text"> 新規</span></button>
-    <button class="btn" onclick="renameCurrentFile()" title="名前変更">✏️<span class="btn-text"> 名前変更</span></button>
+    <select id="fileSelect" class="file-select"></select>
+    <button class="btn" id="newFileBtn" title="新規作成">➕<span class="btn-text"> 新規</span></button>
+    <button class="btn" id="renameBtn" title="名前変更">✏️<span class="btn-text"> 名前変更</span></button>
 
     <div class="divider"></div>
 
-    <input type="file" id="importZipInput" accept=".zip" style="display:none;" onchange="importZip(event)">
-    <button class="btn" onclick="openFileModal()" title="ファイル操作">📁<span class="btn-text"> ファイル操作</span></button>
+    <input type="file" id="importZipInput" accept=".zip" style="display:none;">
+    <button class="btn" id="fileModalBtn" title="ファイル操作">📁<span class="btn-text"> ファイル操作</span></button>
 </div>
 
 <div class="main-content">
@@ -34,11 +34,11 @@ import Layout from '../layouts/Layout.astro';
 </div>
 
 <!-- ヘルプモーダル -->
-<div class="modal-overlay" id="helpModal" onclick="closeHelpOnOutside(event)">
+<div class="modal-overlay" id="helpModal">
     <div class="modal-content" style="max-width: 700px; max-height: 85vh; overflow-y: auto;">
         <div class="modal-header">
             <h2>使い方と免責事項</h2>
-            <button class="modal-close" onclick="closeHelp()">&times;</button>
+            <button class="modal-close" id="helpCloseBtn">&times;</button>
         </div>
         <div class="modal-body">
             <p>ブラウザで軽快に動作するMarkdownエディタです。<br>
@@ -85,11 +85,11 @@ import Layout from '../layouts/Layout.astro';
 </div>
 
 <!-- プロンプトモーダル -->
-<div class="modal-overlay" id="promptModal" onclick="closePromptOnOutside(event)">
+<div class="modal-overlay" id="promptModal">
     <div class="modal-content" style="max-width: 600px;">
         <div class="modal-header">
             <h2>💡 AIプロンプトツール</h2>
-            <button class="modal-close" onclick="closePrompt()">&times;</button>
+            <button class="modal-close" id="promptCloseBtn">&times;</button>
         </div>
         <div class="modal-body">
             <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
@@ -103,7 +103,7 @@ import Layout from '../layouts/Layout.astro';
                 3. 書いた文章を全部コピーしてChatGPTやClaudeなどに貼り付けて送信します。<br>
                 4. AIが「最適な指示文（プロンプト）」を作ってくれるので、それを使って目的の作業を行います。
             </div>
-            <button class="btn btn-primary" onclick="insertPrompt('meta')" style="margin-bottom: 25px;">📝
+            <button class="btn btn-primary" id="insertMetaBtn" style="margin-bottom: 25px;">📝
                 エディタにメタプロンプトを挿入</button>
 
             <h3 style="font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">2.
@@ -111,11 +111,11 @@ import Layout from '../layouts/Layout.astro';
             <p style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 15px;">
                 よく使うプロンプトのひな型です。クリックするとエディタに挿入されます。</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="btn" onclick="insertPrompt('summary')">📄 文章の要約</button>
-                <button class="btn" onclick="insertPrompt('proofread')">✅ 文章の校正</button>
-                <button class="btn" onclick="insertPrompt('translate')">🌐 翻訳</button>
-                <button class="btn" onclick="insertPrompt('code')">💻 コード解説</button>
-                <button class="btn" onclick="insertPrompt('idea')">🧠 アイデア出し</button>
+                <button class="btn" id="btnSummary">📄 文章の要約</button>
+                <button class="btn" id="btnProofread">✅ 文章の校正</button>
+                <button class="btn" id="btnTranslate">🌐 翻訳</button>
+                <button class="btn" id="btnCode">💻 コード解説</button>
+                <button class="btn" id="btnIdea">🧠 アイデア出し</button>
             </div>
         </div>
     </div>
@@ -143,7 +143,7 @@ import Layout from '../layouts/Layout.astro';
                     style="font-size: 0.95rem; cursor: pointer; user-select: none;">次回以降表示しない</label>
             </div>
             <div style="margin-top: 25px;">
-                <button class="btn btn-primary" onclick="acceptDisclaimer()"
+                <button class="btn btn-primary" id="acceptDisclaimerBtn"
                     style="width: 100%; justify-content: center; font-size: 1rem; padding: 10px;">了解しました</button>
             </div>
         </div>
@@ -151,34 +151,34 @@ import Layout from '../layouts/Layout.astro';
 </div>
 
 <!-- ファイル操作モーダル -->
-<div class="modal-overlay" id="fileModal" onclick="closeFileModalOnOutside(event)">
+<div class="modal-overlay" id="fileModal">
     <div class="modal-content" style="max-width: 400px;">
         <div class="modal-header">
             <h2>📁 ファイル操作</h2>
-            <button class="modal-close" onclick="closeFileModal()">&times;</button>
+            <button class="modal-close" id="fileModalCloseBtn">&times;</button>
         </div>
         <div class="modal-body">
             <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">クリップボードへコピー</h3>
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn" style="justify-content: flex-start;" onclick="copyToClipboard('markdown'); closeFileModal();">📝 Markdown形式</button>
-                <button class="btn" style="justify-content: flex-start;" onclick="copyToClipboard('html'); closeFileModal();">🌐 HTML形式</button>
+                <button class="btn" style="justify-content: flex-start;" id="copyMarkdownBtn">📝 Markdown形式</button>
+                <button class="btn" style="justify-content: flex-start;" id="copyHtmlBtn">🌐 HTML形式</button>
             </div>
 
             <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">エクスポート</h3>
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn" style="justify-content: flex-start;" onclick="downloadFile('md'); closeFileModal();">📝 Markdown形式</button>
-                <button class="btn" style="justify-content: flex-start;" onclick="downloadFile('html'); closeFileModal();">🌐 HTML形式</button>
-                <button class="btn" style="justify-content: flex-start;" onclick="exportZip(); closeFileModal();">📦 すべてのMarkdown形式 (ZIP)</button>
+                <button class="btn" style="justify-content: flex-start;" id="downloadMdBtn">📝 Markdown形式</button>
+                <button class="btn" style="justify-content: flex-start;" id="downloadHtmlBtn">🌐 HTML形式</button>
+                <button class="btn" style="justify-content: flex-start;" id="exportZipBtn">📦 すべてのMarkdown形式 (ZIP)</button>
             </div>
 
             <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">インポート</h3>
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn" style="justify-content: flex-start;" onclick="document.getElementById('importZipInput').click(); closeFileModal();">📂 Markdown形式 (ZIP)</button>
+                <button class="btn" style="justify-content: flex-start;" id="importZipBtn">📂 Markdown形式 (ZIP)</button>
             </div>
 
             <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px; color: #d73a49;">危険な操作</h3>
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="btn" style="justify-content: flex-start; color: #d73a49; border-color: #ffdce0; background-color: #ffeef0;" onclick="deleteCurrentFile(); closeFileModal();">🗑️ 現在のファイルを削除</button>
+                <button class="btn" style="justify-content: flex-start; color: #d73a49; border-color: #ffdce0; background-color: #ffeef0;" id="deleteFileBtn">🗑️ 現在のファイルを削除</button>
             </div>
         </div>
     </div>
