@@ -33,9 +33,6 @@ const STORAGE_FILES_KEY = 'md_editor_files';
 const STORAGE_CURRENT_KEY = 'md_editor_current_id';
 const STORAGE_DISCLAIMER_KEY = 'md_editor_disclaimer_accepted';
 
-const MAX_ZIP_FILES = 50;
-const MAX_FILE_SIZE_BYTES = 1 * 1024 * 1024; // 1MB per file
-
 let files = [];
 let currentFileId = null;
 
@@ -503,26 +500,13 @@ async function importZip(event) {
         const zip = new JSZipObj();
         const contents = await zip.loadAsync(file);
 
-        const allEntries = Object.entries(contents.files).filter(
-            ([filename, entry]) => !entry.dir && filename.toLowerCase().endsWith('.md')
-        );
-
-        if (allEntries.length > MAX_ZIP_FILES) {
-            alert(`インポートできるファイルは最大 ${MAX_ZIP_FILES} 件です（ZIPに ${allEntries.length} 件含まれています）。`);
-            return;
-        }
-
         let importedCount = 0;
         const newFiles = [];
 
-        for (const [filename, zipEntry] of allEntries) {
+        for (const [filename, zipEntry] of Object.entries(contents.files)) {
+            if (zipEntry.dir || !filename.toLowerCase().endsWith('.md')) continue;
+
             const textContent = await zipEntry.async("string");
-
-            if (textContent.length > MAX_FILE_SIZE_BYTES) {
-                alert(`「${filename}」のサイズが上限（1MB）を超えているためスキップしました。`);
-                continue;
-            }
-
             const title = filename.replace(/\.md$/i, '').split('/').pop() || 'Imported Document';
 
             newFiles.push({
