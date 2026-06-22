@@ -1,8 +1,7 @@
 ---
-layout: default
-title: Markdown Editor
-permalink: /
+import Layout from '../layouts/Layout.astro';
 ---
+<Layout title="Markdown Editor">
 <header>
     <h1>Markdown Editor</h1>
     <div style="display: flex; gap: 10px; align-items: center;">
@@ -13,7 +12,6 @@ permalink: /
 </header>
 
 <div class="controls">
-    <!-- ファイル管理UI -->
     <select id="fileSelect" class="file-select" onchange="loadFile()"></select>
     <button class="btn" onclick="createNewFile()" title="新規作成">➕<span class="btn-text"> 新規</span></button>
     <button class="btn" onclick="renameCurrentFile()" title="名前変更">✏️<span class="btn-text"> 名前変更</span></button>
@@ -21,17 +19,13 @@ permalink: /
     <div class="divider"></div>
 
     <input type="file" id="importZipInput" accept=".zip" style="display:none;" onchange="importZip(event)">
-
     <button class="btn" onclick="openFileModal()" title="ファイル操作">📁<span class="btn-text"> ファイル操作</span></button>
-
-    <!-- コピーライト表記（フッターに移動） -->
 </div>
 
 <div class="main-content">
     <div class="pane">
         <div class="pane-header">Editor</div>
-        <textarea id="editor" placeholder="# Hello Markdown&#13;&#10;ここにMarkdownを入力してください..."
-            oninput="updatePreview()"></textarea>
+        <textarea id="editor" placeholder="# Hello Markdown&#13;&#10;ここにMarkdownを入力してください..."></textarea>
     </div>
     <div class="pane">
         <div class="pane-header">Preview</div>
@@ -63,8 +57,7 @@ permalink: /
 
             <hr style="border: none; border-top: 1px solid var(--border-color); margin: 25px 0 15px;">
 
-            <h3
-                style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+            <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
                 💡 プロンプト作成支援について</h3>
             <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px;">ヘッダーの「💡
                 AIへの指示を作る」ボタンから、AIを強力に活用するための指示文（プロンプト）を入力できます。</p>
@@ -76,8 +69,7 @@ permalink: /
 
             <hr style="border: none; border-top: 1px solid var(--border-color); margin: 25px 0 15px;">
 
-            <h3
-                style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+            <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
                 ご利用の前にご確認ください（免責事項）</h3>
             <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px;">本ツールは <strong><a
                         href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer"
@@ -100,14 +92,11 @@ permalink: /
             <button class="modal-close" onclick="closePrompt()">&times;</button>
         </div>
         <div class="modal-body">
-            <h3
-                style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+            <h3 style="margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
                 1. プロンプト作成用メタプロンプト</h3>
-            <p
-                style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 5px;">
+            <p style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 5px;">
                 生成AIに「最適なプロンプト」を作らせるためのテンプレートです。</p>
-            <div
-                style="background-color: var(--code-bg); padding: 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; border: 1px solid var(--border-color);">
+            <div style="background-color: var(--code-bg); padding: 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; border: 1px solid var(--border-color);">
                 <strong>💡 使い方：</strong><br>
                 1. 下のボタンを押してエディタにテンプレートを挿入。<br>
                 2. <code>[ここにあなたが達成したい目的を入力してください]</code> の部分に、AIにやってほしいこと（例：「ブログのタイトルを10個考えて」）を書きます。<br>
@@ -119,8 +108,7 @@ permalink: /
 
             <h3 style="font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">2.
                 汎用プロンプトテンプレート</h3>
-            <p
-                style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 15px;">
+            <p style="font-size: 0.9rem; color: var(--text-color); opacity: 0.8; margin-top: 5px; margin-bottom: 15px;">
                 よく使うプロンプトのひな型です。クリックするとエディタに挿入されます。</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <button class="btn" onclick="insertPrompt('summary')">📄 文章の要約</button>
@@ -196,13 +184,10 @@ permalink: /
     </div>
 </div>
 
-<script>
-    // DOM Elements
+<script is:inline>
     const editor = document.getElementById('editor');
     const preview = document.getElementById('preview');
 
-    // --- Marked.js 設定 (Syntax Highlighting) ---
-    // 最新のmarked.jsに対応するため、rendererをカスタマイズしてハイライトを適用
     const renderer = {
         code(code, infostring) {
             const lang = (infostring || '').match(/\S*/)[0];
@@ -218,7 +203,6 @@ permalink: /
                 } catch (e) { }
             }
 
-            // ハイライトに失敗または空の場合はエスケープしたコードを使用
             if (!highlighted) {
                 highlighted = code.replace(/&/g, '&amp;')
                     .replace(/</g, '&lt;')
@@ -232,7 +216,6 @@ permalink: /
 
     marked.use({ renderer });
 
-    // --- 複数ファイル管理 (ローカルストレージ) ---
     const STORAGE_FILES_KEY = 'md_editor_files';
     const STORAGE_CURRENT_KEY = 'md_editor_current_id';
     const STORAGE_DISCLAIMER_KEY = 'md_editor_disclaimer_accepted';
@@ -240,9 +223,7 @@ permalink: /
     let files = [];
     let currentFileId = null;
 
-    // --- 初期化 ---
     document.addEventListener('DOMContentLoaded', () => {
-        // 免責事項のチェック
         if (!localStorage.getItem(STORAGE_DISCLAIMER_KEY) && !sessionStorage.getItem('md_editor_disclaimer_session')) {
             document.getElementById('disclaimerModal').classList.add('active');
         }
@@ -253,14 +234,11 @@ permalink: /
         updatePreview();
     });
 
-    // --- 免責事項関連 ---
     function acceptDisclaimer() {
         const noShow = document.getElementById('disclaimerNoShow').checked;
         if (noShow) {
-            // 次回以降（次回アクセス時）も表示しない
             localStorage.setItem(STORAGE_DISCLAIMER_KEY, 'true');
         } else {
-            // 今開いているタブ（セッション）が有効な間は再表示しない
             sessionStorage.setItem('md_editor_disclaimer_session', 'true');
         }
         document.getElementById('disclaimerModal').classList.remove('active');
@@ -276,7 +254,6 @@ permalink: /
             }
         }
 
-        // 初回起動時・または旧データからの移行
         if (files.length === 0) {
             const oldData = localStorage.getItem('md_editor_autosave_data');
             files.push({
@@ -284,13 +261,19 @@ permalink: /
                 title: '無題のドキュメント',
                 content: oldData !== null ? oldData : ''
             });
-            localStorage.removeItem('md_editor_autosave_data'); // 移行後削除
+            localStorage.removeItem('md_editor_autosave_data');
             saveFilesToStorage();
         }
     }
 
     function saveFilesToStorage() {
-        localStorage.setItem(STORAGE_FILES_KEY, JSON.stringify(files));
+        try {
+            localStorage.setItem(STORAGE_FILES_KEY, JSON.stringify(files));
+        } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+                alert('保存領域の上限に達しました。不要なドキュメントを削除してください。');
+            }
+        }
     }
 
     function updateFileList() {
@@ -311,7 +294,6 @@ permalink: /
         let savedCurrentId = localStorage.getItem(STORAGE_CURRENT_KEY);
         let file = files.find(f => f.id === savedCurrentId);
 
-        // 該当ファイルがなければ最初のファイルを選択
         if (!file && files.length > 0) {
             file = files[0];
         }
@@ -387,11 +369,9 @@ permalink: /
         }
     }
 
-    // --- プレビュー更新 ---
     function updatePreview() {
         const markdownText = editor.value;
 
-        // 各ファイルごとにオートセーブ
         if (currentFileId) {
             const file = files.find(f => f.id === currentFileId);
             if (file) {
@@ -404,20 +384,17 @@ permalink: /
         preview.innerHTML = htmlContent;
     }
 
-    // --- 編集サポート (自動リスト) ---
     editor.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
-            if (e.isComposing) return; // IME変換中は無効化
+            if (e.isComposing) return;
 
             const start = this.selectionStart;
             const end = this.selectionEnd;
 
-            // 現在の行のテキストを取得
             const text = this.value;
             const prevLineStart = text.lastIndexOf('\n', start - 1) + 1;
             const currentLine = text.substring(prevLineStart, start);
 
-            // リストパターンのマッチ (ハイフン、アスタリスク、数字)
             const listMatch = currentLine.match(/^(\s*)([-*]|\d+\.)\s/);
 
             if (listMatch) {
@@ -426,16 +403,12 @@ permalink: /
                 const indent = listMatch[1];
                 const marker = listMatch[2];
 
-                // 空のリストアイテムでEnterを押した場合、リストを終了する
                 if (currentLine.trim() === marker || currentLine.trim() === marker + '.') {
-                    // 行を削除して改行のみにする (リスト終了)
                     const newText = text.substring(0, prevLineStart) + '\n' + text.substring(end);
                     this.value = newText;
                     this.selectionStart = this.selectionEnd = prevLineStart + 1;
                 } else {
-                    // 新しいリストアイテムを挿入
                     let newMarker = marker;
-                    // 番号付きリストの場合は番号をインクリメント
                     if (/^\d+\.$/.test(marker)) {
                         const num = parseInt(marker);
                         newMarker = (num + 1) + '.';
@@ -447,19 +420,16 @@ permalink: /
                     this.value = newText;
                     this.selectionStart = this.selectionEnd = start + insertion.length;
                 }
-                // プレビュー即時更新
                 updatePreview();
             }
         }
 
-        // Tab / Shift+Tab インデントサポート
         if (e.key === 'Tab') {
             e.preventDefault();
             const start = this.selectionStart;
             const end = this.selectionEnd;
             const value = this.value;
 
-            // 選択範囲の行頭・行末を探す
             const lineStart = value.lastIndexOf('\n', start - 1) + 1;
             const lineEnd = value.indexOf('\n', end);
             const endLinePos = lineEnd === -1 ? value.length : lineEnd;
@@ -472,14 +442,9 @@ permalink: /
             let newEnd = end;
 
             if (e.shiftKey) {
-                // Shift + Tab: インデント削除 (Outdent) & 連番リセット
-
-                // 1. 直前の文脈から開始番号を決定する
                 let nextNum = 1;
                 const preLines = value.substring(0, lineStart).split('\n');
 
-                // 逆方向に走査して、インデントアウト後のレベル(現在より1段浅い)にあるリストを探す
-                // currentIndentLevel - 1 (ただしスペース数で判定)
                 const firstSelLine = lines[0];
                 const firstSelIndentMatch = firstSelLine.match(/^\s*/);
                 const currentIndentLen = firstSelIndentMatch ? firstSelIndentMatch[0].length : 0;
@@ -491,16 +456,12 @@ permalink: /
                     const pIndentLen = pIndentMatch ? pIndentMatch[0].length : 0;
 
                     if (pIndentLen === targetIndentLen) {
-                        // 同じインデントレベルの行を発見
                         const listMatch = pLine.match(/^(\s*)(\d+)\./);
                         if (listMatch) {
                             nextNum = parseInt(listMatch[2]) + 1;
                         }
-                        // リストでなくても、同じインデントレベルの何かにぶつかったら、そこが直前の兄弟とみなして探索終了
-                        // (ただし空行はスキップしたほうがいいかも？今回は簡易実装で空行以外なら終了)
                         if (pLine.trim().length > 0) break;
                     } else if (pIndentLen < targetIndentLen) {
-                        // さらに浅いインデント(親)にぶつかったら、これ以上前の兄弟はいないので 1 から
                         if (pLine.trim().length > 0) break;
                     }
                 }
@@ -508,7 +469,6 @@ permalink: /
                 newText = lines.map((line, i) => {
                     let processedLine = line;
 
-                    // インデント削除
                     if (line.startsWith(indentUnit)) {
                         processedLine = line.substring(indentUnit.length);
                         if (i === 0) newStart -= indentUnit.length;
@@ -521,7 +481,6 @@ permalink: /
                         newEnd -= len;
                     }
 
-                    // 番号付きリストなら番号を更新
                     const listMatch = processedLine.match(/^(\s*)(\d+)\.(\s+)/);
                     if (listMatch) {
                         processedLine = processedLine.replace(/^(\s*)\d+\./, `$1${nextNum}.`);
@@ -531,16 +490,13 @@ permalink: /
                     return processedLine;
                 }).join('\n');
             } else {
-                // Tab: インデント追加 (Indent)
-
-                // 1. 直前の文脈から開始番号を決定する
                 let nextNum = 1;
                 const preLines = value.substring(0, lineStart).split('\n');
 
                 const firstSelLine = lines[0];
                 const firstSelIndentMatch = firstSelLine.match(/^\s*/);
                 const currentIndentLen = firstSelIndentMatch ? firstSelIndentMatch[0].length : 0;
-                const targetIndentLen = currentIndentLen + indentUnit.length; // インデント後は深くなる
+                const targetIndentLen = currentIndentLen + indentUnit.length;
 
                 for (let i = preLines.length - 1; i >= 0; i--) {
                     const pLine = preLines[i];
@@ -548,14 +504,12 @@ permalink: /
                     const pIndentLen = pIndentMatch ? pIndentMatch[0].length : 0;
 
                     if (pIndentLen === targetIndentLen) {
-                        // 同じインデントレベル(深くなった先と同じレベル)の行を発見
                         const listMatch = pLine.match(/^(\s*)(\d+)\./);
                         if (listMatch) {
                             nextNum = parseInt(listMatch[2]) + 1;
                         }
                         if (pLine.trim().length > 0) break;
                     } else if (pIndentLen < targetIndentLen) {
-                        // 親レベルが見つかったら、そこまで兄弟はいなかったということ
                         if (pLine.trim().length > 0) break;
                     }
                 }
@@ -563,7 +517,6 @@ permalink: /
                 newText = lines.map((line, i) => {
                     let indentedLine = indentUnit + line;
 
-                    // 番号付きリストなら番号を更新
                     const listMatch = indentedLine.match(/^(\s*)(\d+)\.(\s+)/);
                     if (listMatch) {
                         indentedLine = indentedLine.replace(/^(\s*)\d+\./, `$1${nextNum}.`);
@@ -578,17 +531,14 @@ permalink: /
                 }).join('\n');
             }
 
-            // テキスト更新
             this.value = value.substring(0, lineStart) + newText + value.substring(endLinePos);
 
-            // カーソル位置復元
             this.selectionStart = Math.max(lineStart, newStart);
             this.selectionEnd = Math.max(lineStart, newEnd);
             updatePreview();
         }
     });
 
-    // --- コピー機能 ---
     async function copyToClipboard(type) {
         let text = "";
         if (type === 'markdown') {
@@ -606,40 +556,40 @@ permalink: /
         }
     }
 
-    // --- ダウンロード機能 ---
     function downloadFile(type) {
         let content = "";
         let mimeType = "";
         let fileName = "";
 
-        // --- 追加: 現在のファイルのタイトルを取得 ---
-        // `currentFileId` から現在選択中のファイルを探します
         const currentFile = files.find(f => f.id === currentFileId);
-        // ファイルが見つかればそのタイトルを、なければデフォルトの 'document' をファイル名に使用します
         const baseFileName = currentFile && currentFile.title ? currentFile.title : 'document';
 
         if (type === 'md') {
             content = editor.value;
             mimeType = "text/markdown";
-            fileName = `${baseFileName}.md`; // 修正: 現在の書類の名前を使用
+            fileName = `${baseFileName}.md`;
         } else if (type === 'html') {
-            // 安全に style タグを取得（存在しない場合のエラー回避）
             const styleElement = document.querySelector('style');
-            const style = styleElement ? styleElement.textContent : ''; 
-            
+            const style = styleElement ? styleElement.textContent : '';
+
             const isDark = document.body.classList.contains('dark-mode');
             const hljsCss = isDark
                 ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
                 : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
 
+            const safeTitle = baseFileName
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+
             content = `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>${baseFileName}</title> <!-- 修正: titleタグもドキュメント名に合わせました -->
+<title>${safeTitle}</title>
 <link rel="stylesheet" href="${hljsCss}">
 <style>
-/* Preview Styles Only */
 body { font-family: sans-serif; line-height: 1.6; color: ${isDark ? '#c9d1d9' : '#333'}; background-color: ${isDark ? '#0d1117' : '#fff'}; max-width: 800px; margin: 0 auto; padding: 20px; }
 h1, h2, h3 { border-bottom: 1px solid #ddd; padding-bottom: 0.3em; }
 code { background-color: ${isDark ? '#161b22' : '#f6f8fa'}; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; }
@@ -656,7 +606,7 @@ ${preview.innerHTML}
 </body>
 </html>`;
             mimeType = "text/html";
-            fileName = `${baseFileName}.html`; // 修正: "document.html" から現在の書類の名前に変更
+            fileName = `${baseFileName}.html`;
         }
 
         const blob = new Blob([content], { type: mimeType });
@@ -670,7 +620,6 @@ ${preview.innerHTML}
         URL.revokeObjectURL(url);
     }
 
-    // --- 一括エクスポート機能 ---
     async function exportZip() {
         if (files.length === 0) {
             alert("エクスポートするドキュメントがありません。");
@@ -678,15 +627,13 @@ ${preview.innerHTML}
         }
 
         try {
-            const JSZipObj = window.JSZip; 
+            const JSZipObj = window.JSZip;
             if (!JSZipObj) {
                 alert("JSZipライブラリがロードされていません。リロードして再試行してください。");
                 return;
             }
 
             const zip = new JSZipObj();
-            
-            // ファイル名重複対策用
             const usedNames = new Set();
 
             files.forEach((f, idx) => {
@@ -694,8 +641,7 @@ ${preview.innerHTML}
                 if (!title.toLowerCase().endsWith('.md')) {
                     title += '.md';
                 }
-                
-                // 同名ファイルがあれば連番をつける
+
                 let uniqueTitle = title;
                 let counter = 1;
                 while (usedNames.has(uniqueTitle)) {
@@ -718,7 +664,7 @@ ${preview.innerHTML}
             const dd = String(now.getDate()).padStart(2, '0');
             const HH = String(now.getHours()).padStart(2, '0');
             const MM = String(now.getMinutes()).padStart(2, '0');
-            
+
             a.download = `md_export_${yyyy}${mm}${dd}_${HH}${MM}.zip`;
             document.body.appendChild(a);
             a.click();
@@ -730,7 +676,6 @@ ${preview.innerHTML}
         }
     }
 
-    // --- 一括インポート機能 ---
     async function importZip(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -747,18 +692,18 @@ ${preview.innerHTML}
 
             let importedCount = 0;
             const newFiles = [];
-            
+
             for (const [filename, zipEntry] of Object.entries(contents.files)) {
                 if (!zipEntry.dir && filename.toLowerCase().endsWith('.md')) {
                     const textContent = await zipEntry.async("string");
                     const title = filename.replace(/\.md$/i, '').split('/').pop() || 'Imported Document';
-                    
+
                     newFiles.push({
                         id: 'doc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
                         title: title,
                         content: textContent || ''
                     });
-                    
+
                     importedCount++;
                 }
             }
@@ -766,12 +711,12 @@ ${preview.innerHTML}
             if (importedCount > 0) {
                 files = files.concat(newFiles);
                 currentFileId = newFiles[newFiles.length - 1].id;
-                
+
                 saveFilesToStorage();
                 localStorage.setItem(STORAGE_CURRENT_KEY, currentFileId);
                 updateFileList();
                 loadFile();
-                
+
                 alert(`${importedCount}個のファイルをインポートしました。`);
             } else {
                 alert("ZIPファイル内に有効な .md ファイルが見つかりませんでした。");
@@ -785,19 +730,16 @@ ${preview.innerHTML}
         }
     }
 
-    // --- テーマ切り替え ---
     let isDark = false;
     function toggleTheme() {
         isDark = !isDark;
         document.body.classList.toggle('dark-mode', isDark);
         document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
 
-        // Highlight.js テーマ切り替え
         document.getElementById('hljs-light').disabled = isDark;
         document.getElementById('hljs-dark').disabled = !isDark;
     }
 
-    // --- ファイル操作モーダル制御 ---
     function openFileModal() {
         document.getElementById('fileModal').classList.add('active');
     }
@@ -812,7 +754,6 @@ ${preview.innerHTML}
         }
     }
 
-    // --- モーダル制御 ---
     function openHelp() {
         document.getElementById('helpModal').classList.add('active');
     }
@@ -827,7 +768,6 @@ ${preview.innerHTML}
         }
     }
 
-    // --- プロンプトツール制御 ---
     function openPromptModal() {
         document.getElementById('promptModal').classList.add('active');
     }
@@ -842,8 +782,6 @@ ${preview.innerHTML}
         }
     }
 
-    // プロンプトテンプレート定義は assets/templates.js に分離
-
     async function insertPrompt(type) {
         try {
             const response = await fetch(`/assets/prompts/${type}.md`);
@@ -856,21 +794,17 @@ ${preview.innerHTML}
             const end = editor.selectionEnd;
             const text = editor.value;
 
-            // 挿入前に改行が必要かチェック
             let insertText = promptText;
             if (start > 0 && text[start - 1] !== '\n') {
                 insertText = '\n\n' + insertText;
             }
-            // 挿入後にも改行を追加
             insertText = insertText + '\n\n';
 
             editor.value = text.substring(0, start) + insertText + text.substring(end);
 
-            // カーソル位置を更新（挿入したテキストの後ろ）
             editor.selectionStart = editor.selectionEnd = start + insertText.length;
             editor.focus();
 
-            // 変更内容をセーブ＆プレビュー更新
             updatePreview();
             closePrompt();
         } catch (error) {
@@ -879,7 +813,6 @@ ${preview.innerHTML}
         }
     }
 
-    // --- スクロール同期 ---
     let isSyncingEditor = false;
     let isSyncingPreview = false;
 
@@ -900,6 +833,5 @@ ${preview.innerHTML}
         }
         isSyncingPreview = false;
     });
-
 </script>
-{% include footer.html %}
+</Layout>
