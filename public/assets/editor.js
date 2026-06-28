@@ -432,17 +432,25 @@ ${preview.innerHTML}
     URL.revokeObjectURL(url);
 }
 
-function downloadPdf() {
+async function downloadPdf() {
     const currentFile = files.find(f => f.id === currentFileId);
     const title = currentFile && currentFile.title ? currentFile.title : 'document';
     const cssUrl = `${window.location.origin}/assets/pdf.css`;
+
+    let cssText = '';
+    try {
+        const res = await fetch(cssUrl);
+        cssText = await res.text();
+    } catch (e) {
+        console.error('PDF CSS fetch failed:', e);
+    }
 
     const html = `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>${title}</title>
-<link rel="stylesheet" href="${cssUrl}">
+<style>${cssText}</style>
 </head>
 <body>
 ${preview.innerHTML}
