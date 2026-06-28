@@ -432,6 +432,30 @@ ${preview.innerHTML}
     URL.revokeObjectURL(url);
 }
 
+function downloadPdf() {
+    const currentFile = files.find(f => f.id === currentFileId);
+    const title = currentFile && currentFile.title ? currentFile.title : 'document';
+    const cssUrl = `${window.location.origin}/assets/pdf.css`;
+
+    const html = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>${title}</title>
+<link rel="stylesheet" href="${cssUrl}">
+</head>
+<body>
+${preview.innerHTML}
+</body>
+</html>`;
+
+    const popup = window.open('', '_blank', 'width=900,height=700');
+    popup.document.write(html);
+    popup.document.close();
+    popup.addEventListener('afterprint', () => popup.close());
+    popup.onload = () => popup.print();
+}
+
 async function exportZip() {
     if (files.length === 0) {
         alert("エクスポートするドキュメントがありません。");
@@ -674,6 +698,7 @@ document.getElementById('copyMarkdownBtn').addEventListener('click', () => { cop
 document.getElementById('copyHtmlBtn').addEventListener('click', () => { copyToClipboard('html'); closeFileModal(); });
 document.getElementById('downloadMdBtn').addEventListener('click', () => { downloadFile('md'); closeFileModal(); });
 document.getElementById('downloadHtmlBtn').addEventListener('click', () => { downloadFile('html'); closeFileModal(); });
+document.getElementById('downloadPdfBtn').addEventListener('click', () => { closeFileModal(); setTimeout(downloadPdf, 200); });
 document.getElementById('exportZipBtn').addEventListener('click', () => { exportZip(); closeFileModal(); });
 document.getElementById('importZipBtn').addEventListener('click', () => { document.getElementById('importZipInput').click(); closeFileModal(); });
 document.getElementById('deleteFileBtn').addEventListener('click', () => { deleteCurrentFile(); closeFileModal(); });
